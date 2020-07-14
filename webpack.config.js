@@ -1,12 +1,15 @@
 const path = require('path');
-const WatchExternalFilesPlugin = require('webpack-watch-files-plugin').default;
+const WebpackHtmlPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'development',
   entry: './src/app.js',
   output: {
-    path: path.resolve(__dirname, 'public'),
+    path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
+  },
+  watchOptions: {
+    ignored: ['node_modules/**'],
   },
   module: {
     rules: [
@@ -26,8 +29,8 @@ module.exports = {
     ],
   },
   plugins: [
-    new WatchExternalFilesPlugin({
-      files: ['./src/**/*.js'],
+    new WebpackHtmlPlugin({
+      template: 'src/index.html',
     }),
   ],
 };
