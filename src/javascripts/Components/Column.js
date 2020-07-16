@@ -65,6 +65,9 @@ export default class Column extends Element {
   }
 
   addLi(ul) {
+    const li = document.createElement('li');
+    li.className = 'start_point';
+    ul.appendChild(li);
     this.notes.forEach((note) => {
       ul.appendChild(note.dom.render());
     });
