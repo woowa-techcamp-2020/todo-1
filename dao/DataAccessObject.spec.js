@@ -12,7 +12,7 @@ test('connect is success.', async () => {
 
 test('return a user object', async () => {
   const user = await dao.getUserById(1);
-  expect(user[0]).toEqual({
+  expect(user).toEqual({
     id: 1,
     name: 'CAMP',
     profile_image: '{filename}',
