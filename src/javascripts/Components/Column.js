@@ -106,6 +106,7 @@ export default class Column extends Element {
 
     this.form = form;
     this.textArea = textArea;
+    this.createButton = createButton;
     this.cancelButton = cancelButton;
     return form;
   }
@@ -137,6 +138,19 @@ export default class Column extends Element {
     console.log(this.notes);
   }
 
+  appendNote(data) {
+    const noteObject = {
+      key: data.key,
+      data: data,
+      dom: new Note(data),
+    };
+    this.pushNote(noteObject, 0);
+    this.ul.insertBefore(
+      noteObject.dom.render(),
+      this.ul.firstChild.nextSibling,
+    );
+  }
+
   setElement() {
     const wrapper = this.getWrapper();
 
@@ -162,6 +176,22 @@ export default class Column extends Element {
       if (this.textArea.value.length < 1) {
         this.form.classList.add('disable');
       }
+    });
+    this.createButton.addEventListener('click', () => {
+      if (this.form.classList.contains('disable')) {
+        return;
+      }
+
+      const noteObject = {
+        key: 123,
+        title: this.textArea.value,
+        name: 'ADMIN',
+      };
+
+      this.appendNote(noteObject);
+      this.textArea.value = null;
+      this.form.classList.add('disable');
+      this.form.classList.add('hidden');
     });
   }
 }
