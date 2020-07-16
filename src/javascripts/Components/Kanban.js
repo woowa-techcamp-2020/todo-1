@@ -122,7 +122,7 @@ export default class Kanban extends Element {
 
   _mouseup() {
     this.clicked = false;
-    if (this.li) {
+    if (this.li && this.li.closest('.column')) {
       this.li.classList.remove('temp_space');
 
       const { key } = this.li.closest('.column').dataset;
