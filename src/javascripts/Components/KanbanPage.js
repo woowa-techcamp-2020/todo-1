@@ -48,9 +48,10 @@ const data = {
 export default class KanbanPage extends Element {
   constructor() {
     super();
+    this.header = new Header();
+    this.kanban = null;
 
     this.setElement();
-    this.fetchKanbanData();
   }
 
   fetchKanbanData() {
@@ -63,10 +64,8 @@ export default class KanbanPage extends Element {
   setElement() {
     const wrapper = document.createElement('div');
 
-    this.header = new Header().render();
-    this.kanban = null;
-
-    wrapper.appendChild(this.header);
+    wrapper.appendChild(this.header.render());
+    this.fetchKanbanData();
 
     this.element = wrapper;
   }
