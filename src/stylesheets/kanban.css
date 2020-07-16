@@ -228,3 +228,97 @@ body section {
 .hover li footer p.writter {
   color: #000000;
 }
+
+/* 칸반 > 칼럼 > 새로운 노트 생성 */
+
+.kanban .column form {
+  margin: 10px 10px 0 10px;
+  border: 1px solid #000000;
+  padding: 5px;
+  border-radius: 10px;
+
+  background-color: #ffffff;
+}
+
+.kanban .column form.hidden {
+  display: none;
+}
+
+.kanban .column form textarea {
+  width: calc(100% - 6px);
+  height: 40px;
+  resize: vertical;
+}
+
+.kanban .column form div.buttons {
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.kanban .column form div.buttons button {
+  width: calc(50% - 10px);
+  height: 30px;
+  padding: 0px;
+  margin: 5px;
+  border: solid 1px #000000;
+
+  border-radius: 7px;
+
+  transition: all 0.2s ease;
+}
+
+.kanban .column form div.buttons button:active {
+  outline: none;
+}
+
+.kanban .column form div.buttons button:focus {
+  outline: 0;
+}
+
+.kanban .column form div.buttons button.create {
+  background-color: #2ea44f;
+  color: #ffffff;
+}
+
+.kanban .column form div.buttons button.create:hover {
+  background-color: #2c8f48;
+}
+
+.kanban .column form div.buttons button.create:active {
+  background-color: #298643;
+}
+
+.kanban .column form.disable div.buttons button.create {
+  background-color: #307c46;
+  color: #dddddd;
+}
+
+.kanban .column form.disable div.buttons button.create:hover {
+  background-color: #307c46;
+}
+
+.kanban .column form.disable div.buttons button.create:active {
+  background-color: #307c46;
+}
+
+.kanban .column form div.buttons button.cancel {
+  background-color: #eeeeee;
+  color: #000000;
+}
+
+.kanban .column form div.buttons button.cancel:hover {
+  background-color: #dddddd;
+}
+
+.kanban .column form div.buttons button.cancel:active {
+  background-color: #cccccc;
+}
+
+.kanban .column form div.disable {
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+}

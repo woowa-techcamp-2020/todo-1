@@ -6,9 +6,11 @@ export default class Column extends Element {
     super();
 
     this.notes = [];
-
     this.key = data.key;
     this.title = data.title;
+    this.head = undefined;
+    this.ul = undefined;
+
     data.notes.forEach((note) => {
       this.notes.push({
         key: note.key,
@@ -56,24 +58,56 @@ export default class Column extends Element {
     head.appendChild(left_dom);
     head.appendChild(buttons);
 
+    this.addButton = plus_button;
+
+    this.head = head;
     return head;
   }
 
   getUl() {
     const ul = document.createElement('ul');
-
-    this.addLi(ul);
-
-    return ul;
-  }
-
-  addLi(ul) {
     const li = document.createElement('li');
     li.className = 'start_point';
     ul.appendChild(li);
+
     this.notes.forEach((note) => {
       ul.appendChild(note.dom.render());
     });
+
+    this.ul = ul;
+    return ul;
+  }
+
+  getCreateForm() {
+    const form = document.createElement('form');
+    form.classList.add('disable');
+    form.classList.add('hidden');
+
+    const textArea = document.createElement('textarea');
+    textArea.maxLength = 50;
+
+    const buttons = document.createElement('div');
+    buttons.className = 'buttons';
+    const createButton = document.createElement('button');
+    createButton.type = 'button';
+    createButton.className = 'create';
+    createButton.innerText = '생성';
+
+    const cancelButton = document.createElement('button');
+    cancelButton.type = 'button';
+    cancelButton.className = 'cancel';
+    cancelButton.innerText = '취소';
+
+    buttons.appendChild(createButton);
+    buttons.appendChild(cancelButton);
+
+    form.appendChild(textArea);
+    form.appendChild(buttons);
+
+    this.form = form;
+    this.textArea = textArea;
+    this.cancelButton = cancelButton;
+    return form;
   }
 
   pickNote(noteKey) {
@@ -107,8 +141,27 @@ export default class Column extends Element {
     const wrapper = this.getWrapper();
 
     wrapper.appendChild(this.getHeader());
+    wrapper.appendChild(this.getCreateForm());
     wrapper.appendChild(this.getUl());
 
     this.element = wrapper;
+  }
+
+  setEventListeners() {
+    this.addButton.addEventListener('click', () => {
+      this.form.classList.remove('hidden');
+    });
+    this.cancelButton.addEventListener('click', () => {
+      this.form.classList.add('hidden');
+    });
+    this.textArea.addEventListener('keydown', () => {
+      // console.log(this.textArea.value);
+      this.form.classList.remove('disable');
+    });
+    this.textArea.addEventListener('keyup', () => {
+      if (this.textArea.value.length < 1) {
+        this.form.classList.add('disable');
+      }
+    });
   }
 }
