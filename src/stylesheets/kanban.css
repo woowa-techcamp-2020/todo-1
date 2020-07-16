@@ -1,5 +1,7 @@
 body {
   margin: 0;
+
+  overflow-x: hidden;
 }
 
 body header {
@@ -52,11 +54,13 @@ body section {
   flex-direction: row;
 
   overflow-x: auto;
+
+  height: calc(100vh - 56px);
 }
 
 .kanban .column {
   width: 400px;
-  margin: 0 20px 0 20px;
+  margin: 10px;
   border: 1px solid #000000;
   padding: 5px;
   border-radius: 10px;
@@ -110,11 +114,16 @@ body section {
   list-style: none;
   padding: 0;
   margin: 0;
+
+  overflow-y: auto;
 }
 
 .kanban .column ul li {
   /* block drag */
   user-select: none;
+
+  width: inherit;
+  height: inherit;
 
   margin: 10px;
   padding: 5px;
@@ -124,11 +133,6 @@ body section {
   word-break: break-all;
 
   background-color: #ffffff;
-}
-
-.kanban .column ul li.standard {
-  width: inherit;
-  height: inherit;
 }
 
 .kanban .column ul li button.close {
@@ -170,7 +174,8 @@ body section {
   list-style: none;
   padding: 0;
   margin: 0;
-  width: 400px;
+
+  transform: rotate(-5deg);
 }
 
 .hover li {
