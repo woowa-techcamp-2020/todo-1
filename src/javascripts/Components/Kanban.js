@@ -15,15 +15,21 @@ function isBefore(element1, element2) {
 let hover = undefined;
 
 export default class Kanban extends Element {
-  constructor(kanban) {
+  constructor(data) {
     super();
 
+    this.key = data.key;
     this.columns = [];
-    kanban.columns.forEach((column) => {
-      this.columns.push({
+    this.columnsMap = new Map();
+
+    data.columns.forEach((column) => {
+      const columnObject = {
+        key: column.key,
         data: column,
         dom: new Column(column),
-      });
+      };
+      this.columns.push(columnObject);
+      this.columnsMap.set(column.key, columnObject);
     });
 
     this.hover = new Hover();
@@ -37,6 +43,7 @@ export default class Kanban extends Element {
     const wrapper = document.createElement('div');
     wrapper.className = 'kanban';
     wrapper.id = 'mytodo';
+    wrapper.dataset.key = this.key;
 
     return wrapper;
   }

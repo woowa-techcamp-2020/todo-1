@@ -1,17 +1,19 @@
 import Element from './Element.js';
 
 export default class Note extends Element {
-  constructor(note) {
+  constructor(data) {
     super();
 
-    this.title = note.title;
-    this.name = note.name;
+    this.key = data.key;
+    this.title = data.title;
+    this.name = data.name;
 
     this.setElement();
   }
 
   getWrapper() {
     const li = document.createElement('li');
+    li.dataset.key = this.key;
 
     return li;
   }

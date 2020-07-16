@@ -2,14 +2,16 @@ import Element from './Element.js';
 import Note from './Note.js';
 
 export default class Column extends Element {
-  constructor(column) {
+  constructor(data) {
     super();
 
     this.notes = [];
 
-    this.title = column.title;
-    column.notes.forEach((note) => {
+    this.key = data.key;
+    this.title = data.title;
+    data.notes.forEach((note) => {
       this.notes.push({
+        key: note.key,
         data: note,
         dom: new Note(note),
       });
@@ -20,6 +22,7 @@ export default class Column extends Element {
 
   getWrapper() {
     const wrapper = document.createElement('div');
+    wrapper.dataset.key = this.key;
     wrapper.className = 'column';
     return wrapper;
   }
