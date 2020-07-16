@@ -122,9 +122,21 @@ export default class Kanban extends Element {
     hover.clearInnerDom();
   }
 
+  _mouseleave() {
+    if (!this.clicked) {
+      return;
+    }
+    if (this.li) {
+      this.li.classList.remove('temp_space');
+      this.li = undefined;
+    }
+    hover.clearInnerDom();
+  }
+
   setEventListeners() {
     this.element.addEventListener('mousemove', this._mousemove);
     this.element.addEventListener('mousedown', this._mousedown);
     this.element.addEventListener('mouseup', this._mouseup);
+    this.element.addEventListener('mouseleave', this._mouseleave);
   }
 }
