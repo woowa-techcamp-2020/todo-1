@@ -27,6 +27,7 @@ export default class Kanban extends Element {
     });
 
     this.hover = new Hover();
+    this.li = undefined;
     hover = this.hover;
 
     this.setElement();
@@ -83,7 +84,9 @@ export default class Kanban extends Element {
   _mousedown(event) {
     this.clicked = true;
     const target = event.target.closest('li');
-
+    if (!target) {
+      return;
+    }
     if (target.className === 'start_point') {
       return;
     }
@@ -96,8 +99,10 @@ export default class Kanban extends Element {
 
   _mouseup() {
     this.clicked = false;
-    this.li.classList.remove('temp_space');
-    this.li = undefined;
+    if (this.li) {
+      this.li.classList.remove('temp_space');
+      this.li = undefined;
+    }
     hover.clearInnerDom();
   }
 
