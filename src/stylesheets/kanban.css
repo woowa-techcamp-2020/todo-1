@@ -1,0 +1,221 @@
+body {
+  margin: 0;
+}
+
+body header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  height: 50px;
+
+  background-color: #333333;
+}
+
+body header .logo {
+  margin: 0 10px 0 0;
+  padding: 5px;
+  color: #ffffff;
+}
+
+body header .menu {
+  margin: 0 10px 0 0;
+}
+
+body header .menu button {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  padding: 5px;
+  font-size: 1.5rem;
+}
+
+body header .menu button:hover {
+  color: #ffffff;
+}
+
+.dragging {
+  opacity: 1;
+
+  transform: rotate(30);
+
+  border: 1px solid black;
+  background-color: skyblue;
+}
+
+body section {
+  margin-top: 10px;
+}
+
+.kanban {
+  display: flex;
+  flex-direction: row;
+
+  overflow-x: auto;
+}
+
+.kanban .column {
+  width: 400px;
+  margin: 0 20px 0 20px;
+  border: 1px solid #000000;
+  padding: 5px;
+  border-radius: 10px;
+
+  background-color: #cccccc;
+}
+
+.kanban .column .head {
+  width: inherit;
+  height: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.kanban .column .head .left {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.kanban .column .head .left .count {
+  width: 1.5rem;
+  height: 1.5rem;
+  line-height: 1.5rem;
+  border-radius: 1.5rem;
+  color: #ffffff;
+  background-color: #444444;
+
+  text-align: center;
+
+  font-size: 0.8rem;
+}
+
+.kanban .column .head .left h1 {
+  margin: 0 0 0 5px;
+  font-size: 1rem;
+}
+
+.kanban .column .head div.buttons {
+  margin-right: 5px;
+}
+
+.kanban .column .head div.buttons button {
+  width: 20px;
+  height: 20px;
+  padding: 0px;
+}
+
+.kanban .column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.kanban .column ul li {
+  /* block drag */
+  user-select: none;
+
+  margin: 10px;
+  padding: 5px;
+  border-radius: 10px;
+  border: 1px solid #000000;
+  position: relative;
+  word-break: break-all;
+
+  background-color: #ffffff;
+}
+
+.kanban .column ul li.standard {
+  width: inherit;
+  height: inherit;
+}
+
+.kanban .column ul li button.close {
+  width: 20px;
+  height: 20px;
+  padding: 0px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.kanban .column ul li section.content {
+  margin: 10px 30px 10px 10px;
+}
+
+.kanban .column footer {
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.kanban .column footer p {
+  margin: 2px;
+}
+
+.kanban .column footer p.comment {
+  margin-left: 2px;
+  color: #444444;
+  font-style: italic;
+}
+
+.kanban .column footer p.writter {
+  color: #000000;
+}
+
+.hover {
+  position: absolute;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 400px;
+}
+
+.hover li {
+  /* block drag */
+  user-select: none;
+
+  margin: 10px;
+  padding: 5px;
+  border-radius: 10px;
+  border: 1px solid #000000;
+  position: relative;
+  word-break: break-all;
+
+  background-color: #ffffff;
+}
+
+.hover li.standard {
+  height: inherit;
+}
+
+.hover li button.close {
+  width: 20px;
+  height: 20px;
+  padding: 0px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.hover li section.content {
+  margin: 10px 30px 10px 10px;
+}
+
+.hover li footer {
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.hover li footer p {
+  margin: 2px;
+  color: #444444;
+}
+
+.hover li footer p.writter {
+  color: #000000;
+}
