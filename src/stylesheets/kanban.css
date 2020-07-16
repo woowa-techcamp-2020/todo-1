@@ -135,6 +135,10 @@ body section {
   background-color: #ffffff;
 }
 
+.kanban .column ul li.temp_space {
+  opacity: 0.5;
+}
+
 .kanban .column ul li button.close {
   width: 20px;
   height: 20px;
