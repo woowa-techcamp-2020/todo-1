@@ -13,6 +13,7 @@ function isBefore(element1, element2) {
 }
 
 let hover = undefined;
+let targetRemove = undefined;
 
 export default class Kanban extends Element {
   constructor(data) {
@@ -62,12 +63,14 @@ export default class Kanban extends Element {
     this.element = wrapper;
   }
 
-  _trackCurser(event) {
+  _mousemove(event) {
     if (!this.clicked) return;
 
     // pageX, pageY 는 모든 페이지 기반
     // clientX, clientY 는 현제 보이는 화면 기반
     const { pageX, pageY } = event;
+
+    // 잠시 현재 hover element를 가리고 현재 좌표의 element를 가져온다
     hover.element.hidden = true;
     const elemBelow = document.elementFromPoint(pageX, pageY);
     const li = elemBelow.closest('li');
@@ -75,33 +78,39 @@ export default class Kanban extends Element {
 
     hover.tracking(pageX, pageY);
 
-    if (li === null || this.li === undefined) {
+    if (!li || !this.li) {
       return;
     }
 
-    const { className } = li;
-
-    if (isBefore(this.li, li) && className !== 'start_point') {
+    if (isBefore(this.li, li) && li.className !== 'start_point') {
       li.parentNode.insertBefore(this.li, li);
-    } else {
+    } else if (li.parentNode) {
       li.parentNode.insertBefore(this.li, li.nextSibling);
+    }
+
+    // delete hover target
+    if (targetRemove) {
+      targetRemove.remove();
+      targetRemove = undefined;
     }
   }
 
   _mousedown(event) {
     this.clicked = true;
-    const target = event.target.closest('li');
-    if (!target) {
-      return;
-    }
-    if (target.className === 'start_point') {
+    targetRemove = event.target.closest('li');
+
+    if (!targetRemove || targetRemove.className === 'start_point') {
       return;
     }
 
-    this.li = target.cloneNode(true);
+    this.li = targetRemove.cloneNode(true);
     this.li.classList.add('temp_space');
-    hover.changeInnerDom(target.cloneNode(true), event.pageX, event.pageY);
-    target.remove();
+
+    hover.changeInnerDom(
+      targetRemove.cloneNode(true),
+      event.pageX,
+      event.pageY,
+    );
   }
 
   _mouseup() {
@@ -114,7 +123,7 @@ export default class Kanban extends Element {
   }
 
   setEventListeners() {
-    this.element.addEventListener('mousemove', this._trackCurser, false);
+    this.element.addEventListener('mousemove', this._mousemove);
     this.element.addEventListener('mousedown', this._mousedown);
     this.element.addEventListener('mouseup', this._mouseup);
   }
