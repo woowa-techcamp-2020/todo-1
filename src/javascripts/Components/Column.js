@@ -76,9 +76,31 @@ export default class Column extends Element {
     });
   }
 
+  pickNote(noteKey) {
+    const targetIndex = this.notes.findIndex((cur) => {
+      return cur.key === parseInt(noteKey);
+    });
+    if (targetIndex === -1) {
+      return;
+    }
+
+    const target = this.notes[targetIndex];
+    this.notes.splice(targetIndex, 1);
+    this.updateCount();
+
+    return target;
+  }
+
+  pushNote(note, index) {
+    this.notes.splice(index, 0, note);
+    this.updateCount();
+  }
+
   updateCount() {
     const count = this.element.querySelector('.count');
     count.innerText = this.notes.length;
+
+    console.log(this.notes);
   }
 
   setElement() {

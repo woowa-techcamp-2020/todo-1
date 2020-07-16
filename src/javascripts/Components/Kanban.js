@@ -14,6 +14,8 @@ function isBefore(element1, element2) {
 
 let hover = undefined;
 let targetRemove = undefined;
+let targetData = undefined;
+let columnsMap = new Map();
 
 export default class Kanban extends Element {
   constructor(data) {
@@ -21,7 +23,6 @@ export default class Kanban extends Element {
 
     this.key = data.key;
     this.columns = [];
-    this.columnsMap = new Map();
 
     data.columns.forEach((column) => {
       const columnObject = {
@@ -30,11 +31,12 @@ export default class Kanban extends Element {
         dom: new Column(column),
       };
       this.columns.push(columnObject);
-      this.columnsMap.set(column.key, columnObject);
+      columnsMap.set(column.key, columnObject);
     });
 
     this.hover = new Hover();
     this.li = undefined;
+
     hover = this.hover;
 
     this.setElement();
@@ -90,6 +92,11 @@ export default class Kanban extends Element {
 
     // delete hover target
     if (targetRemove) {
+      const { key } = targetRemove.closest('.column').dataset;
+      const columnObject = columnsMap.get(parseInt(key)).dom;
+
+      targetData = columnObject.pickNote(targetRemove.dataset.key);
+
       targetRemove.remove();
       targetRemove = undefined;
     }
@@ -117,6 +124,21 @@ export default class Kanban extends Element {
     this.clicked = false;
     if (this.li) {
       this.li.classList.remove('temp_space');
+
+      const { key } = this.li.closest('.column').dataset;
+      const columnObject = columnsMap.get(parseInt(key)).dom;
+      const ul = columnObject.element.querySelector('ul');
+
+      let index = -1;
+      Array.from(ul.children).forEach((cur, idx) => {
+        if (parseInt(cur.dataset.key) === targetData.key) {
+          index = idx;
+        }
+      });
+
+      columnObject.pushNote(targetData, index - 1);
+
+      targetData = undefined;
       this.li = undefined;
     }
     hover.clearInnerDom();
@@ -128,6 +150,21 @@ export default class Kanban extends Element {
     }
     if (this.li) {
       this.li.classList.remove('temp_space');
+
+      const { key } = this.li.closest('.column').dataset;
+      const columnObject = columnsMap.get(parseInt(key)).dom;
+      const ul = columnObject.element.querySelector('ul');
+
+      let index = -1;
+      Array.from(ul.children).forEach((cur, idx) => {
+        if (parseInt(cur.dataset.key) === targetData.key) {
+          index = idx;
+        }
+      });
+
+      columnObject.pushNote(targetData, index - 1);
+
+      targetData = undefined;
       this.li = undefined;
     }
     hover.clearInnerDom();
