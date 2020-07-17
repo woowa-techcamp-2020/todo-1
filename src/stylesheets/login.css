@@ -1,0 +1,50 @@
+.login-page {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  font-size: 12px;
+  text-align: center;
+}
+
+.login__user-list {
+  width: 640px;
+  margin: 80px auto;
+  padding: 60px 50px;
+  border: 2px solid #aaa;
+  border-radius: 20px;
+}
+
+.login__user-list .header {
+  font-size: 2.5em;
+  font-weight: 500;
+  text-align: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #aaa;
+}
+
+.login__user-list .list {
+  padding-top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.login__user-list .user {
+  margin: 20px;
+  cursor: pointer;
+}
+
+.login__user-list .user .name {
+  padding: 8px 0 4px 0;
+  font-size: 1.8em;
+  font-weight: 500;
+  text-align: center;
+  background: #ddd;
+}
+
+.login__user-list .user img.profile-image {
+  width: 120px;
+  height: 120px;
+  vertical-align: bottom;
+}

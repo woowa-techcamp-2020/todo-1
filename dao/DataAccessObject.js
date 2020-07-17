@@ -100,7 +100,7 @@ class DataAccessObject {
     }
 
     connection.release();
-    return true;
+    return token;
   }
 
   async getTokenInfo(token) {
