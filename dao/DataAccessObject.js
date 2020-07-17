@@ -1,10 +1,7 @@
 const mysql = require('mysql2');
-const User = require('./dto/User');
 const TABLE = require('./constants/table');
-
-const safePromise = (promise) => {
-  return promise.then((data) => [data]).catch((error) => [null, error]);
-};
+const User = require('./dto/User');
+const safePromise = require('../utils/safePromise');
 
 class DataAccessObject {
   constructor(option) {
@@ -26,53 +23,49 @@ class DataAccessObject {
     this.pool.end();
   }
 
-  async isConnectSuccess() {
-    const [connection, error] = await safePromise(this.getConnection());
+  executeQuery(connection, sql, preparedStatement) {
+    return new Promise((resolve, reject) => {
+      connection.execute(sql, preparedStatement, (err, rows) => {
+        if (err) {
+          reject(err);
+        }
 
-    if (error) {
-      return false;
+        resolve(rows);
+      });
+    });
+  }
+
+  async isConnectSuccess() {
+    const [connection, connectionError] = await safePromise(
+      this.getConnection(),
+    );
+
+    connection.release();
+    return !connectionError;
+  }
+
+  async getUserById(userId) {
+    const [connection, connectionError] = await safePromise(
+      this.getConnection(),
+    );
+    if (connectionError) {
+      throw connectionError;
+    }
+
+    const [rows, rowsError] = await safePromise(
+      this.executeQuery(
+        connection,
+        `SELECT * FROM ${TABLE.USER} WHERE id = ?`,
+        [userId],
+      ),
+    );
+
+    if (rowsError) {
+      throw rowsError;
     }
 
     connection.release();
-    return true;
-  }
-
-  async getUserById(id) {
-    const [connection, error] = await safePromise(this.getConnection());
-
-    if (error) {
-      throw error;
-    }
-
-    return new Promise((resolve, reject) => {
-      const userRowsCallback = (err, rows) => {
-        if (err) {
-          throw err;
-        }
-
-        resolve(
-          rows.map((row) => {
-            return new User(row);
-          }),
-        );
-      };
-
-      try {
-        if (error) {
-          throw error;
-        }
-
-        connection.execute(
-          `SELECT * FROM ${TABLE.USER} WHERE id = ?`,
-          [id],
-          userRowsCallback,
-        );
-      } catch (e) {
-        reject(new Error(e));
-      } finally {
-        connection.release();
-      }
-    });
+    return new User(rows[0]);
   }
 }
 

@@ -8,6 +8,7 @@ module.exports = {
     password: process.env.DB_TEST_PASSWORD,
     database: process.env.DB_TEST_NAME,
     connectionLimit: 30,
+    charset: 'utf8mb4',
   },
   production: {
     host: process.env.DB_HOST,
@@ -16,5 +17,6 @@ module.exports = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     connectionLimit: 30,
+    charset: 'utf8mb4',
   },
 };
