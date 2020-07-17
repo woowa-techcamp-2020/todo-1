@@ -1,12 +1,16 @@
 const path = require('path');
-const WebpackHtmlPlugin = require('html-webpack-plugin');
+const HtmlPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: './src/app.js',
+  entry: {
+    kanban: './src/app.js',
+    login: './src/app_login.js',
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
   },
   watchOptions: {
     ignored: ['node_modules/**'],
@@ -29,8 +33,22 @@ module.exports = {
     ],
   },
   plugins: [
-    new WebpackHtmlPlugin({
-      template: 'src/index.html',
+    new CopyPlugin({
+      patterns: [{ from: 'src/static' }],
+    }),
+    new HtmlPlugin({
+      title: '로그인',
+      hash: true,
+      filename: 'index.html',
+      chunks: ['login'], // entry에서 해당 리스트만 포함
+      template: './src/index.html',
+    }),
+    new HtmlPlugin({
+      title: '칸반',
+      hash: true,
+      filename: 'kanban.html',
+      excludeChunks: ['login'], // entry에서 해당 리스트를 제외한 나머지
+      template: './src/index.html',
     }),
   ],
 };
