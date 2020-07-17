@@ -1,6 +1,7 @@
 import Element from './Element.js';
 import Header from './Header.js';
 import Kanban from './Kanban.js';
+import ActivityLog from './ActivityLog.js';
 
 // eslint-disable-next-line no-unused-vars
 import kanban from '../../stylesheets/kanban.css';
@@ -58,6 +59,7 @@ export default class KanbanPage extends Element {
   constructor() {
     super();
     this.header = new Header();
+    this.activityLog = new ActivityLog();
     this.kanban = null;
 
     this.setElement();
@@ -70,11 +72,18 @@ export default class KanbanPage extends Element {
     }, 0);
   }
 
+  setEventListeners() {
+    this.header.menuButton.addEventListener('click', () => {
+      this.activityLog.openActivityLog();
+    });
+  }
+
   setElement() {
     const wrapper = document.createElement('div');
 
     wrapper.appendChild(this.header.render());
     this.fetchKanbanData();
+    wrapper.appendChild(this.activityLog.render());
 
     this.element = wrapper;
   }
