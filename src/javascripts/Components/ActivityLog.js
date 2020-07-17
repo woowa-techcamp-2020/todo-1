@@ -10,6 +10,7 @@ const mockData = {
   method: 'moved',
   columnFrom: 'Todo',
   columnTo: 'Done',
+  time: '1 min ago',
 };
 
 const mockDatas = [];

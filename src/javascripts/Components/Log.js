@@ -9,13 +9,13 @@ export default class Log extends Element {
     this.method = data.method;
     this.columnFrom = data.columnFrom;
     this.columnTo = data.columnTo;
+    this.time = data.time;
 
     this.setElement();
   }
 
   getWrapper() {
     const wrapper = document.createElement('li');
-    wrapper.appendChild(this.getLogDetail());
 
     return wrapper;
   }
@@ -55,8 +55,18 @@ export default class Log extends Element {
     return log;
   }
 
+  getTime() {
+    const timeP = document.createElement('p');
+    timeP.className = 'time';
+    timeP.innerText = this.time;
+
+    return timeP;
+  }
+
   setElement() {
     const wrapper = this.getWrapper();
+    wrapper.appendChild(this.getLogDetail());
+    wrapper.appendChild(this.getTime());
 
     this.element = wrapper;
   }
