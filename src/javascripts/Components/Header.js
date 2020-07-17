@@ -4,6 +4,7 @@ export default class Header extends Element {
   constructor() {
     super();
 
+    this.menuButton = undefined;
     this.setElement();
   }
 
@@ -20,6 +21,8 @@ export default class Header extends Element {
     const menu_button = document.createElement('button');
     menu_button.innerText = 'menu';
     menu.appendChild(menu_button);
+
+    this.menuButton = menu_button;
 
     return menu;
   }
