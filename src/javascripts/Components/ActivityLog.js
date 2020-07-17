@@ -5,7 +5,7 @@ import Log from './Log.js';
 import style from '../../stylesheets/activityLog.css';
 
 const mockData = {
-  data: '@hello',
+  user: '@hello',
   noteTitle: '집에가기',
   method: 'moved',
   columnFrom: 'Todo',

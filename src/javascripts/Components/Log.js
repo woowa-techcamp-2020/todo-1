@@ -5,7 +5,7 @@ export default class Log extends Element {
     super();
 
     this.user = data.user;
-    this.noteTitle = data.title;
+    this.noteTitle = data.noteTitle;
     this.method = data.method;
     this.columnFrom = data.columnFrom;
     this.columnTo = data.columnTo;
@@ -49,7 +49,7 @@ export default class Log extends Element {
 
     if (this.method === 'moved') {
       log.appendChild(toP);
-      log.appendChild(columnFromP);
+      log.appendChild(columnToP);
     }
 
     return log;
