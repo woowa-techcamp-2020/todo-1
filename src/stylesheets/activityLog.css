@@ -1,0 +1,97 @@
+/* activity log */
+
+div#activity_log {
+  background-color: #ffffff;
+  border-left: solid 1px #000000;
+
+  position: fixed;
+  width: 500px;
+  height: 100vh;
+  right: 0;
+  top: 0;
+
+  z-index: 2000;
+
+  overflow-y: scroll;
+
+  transition: all 0.5s ease;
+}
+
+div#activity_log.close {
+  transform: translateX(500px);
+}
+
+div#activity_log .head {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  height: 50px;
+  align-items: center;
+}
+
+div#activity_log .head div {
+  margin: 0 10px 0 10px;
+}
+
+div#activity_log ul {
+  list-style: none;
+  padding: 0;
+}
+
+div#activity_log ul li {
+  user-select: none;
+  padding: 10px;
+  margin: 2px 0 2px 0;
+
+  border-top: solid 1px #000000;
+  border-bottom: solid 1px #000000;
+}
+
+div#activity_log ul li div.log {
+  display: flex;
+  flex-direction: row;
+}
+
+div#activity_log ul li div.log p {
+  margin: 5px;
+}
+div#activity_log ul li div.log p.user,
+div#activity_log ul li div.log p.column,
+div#activity_log ul li div.log p.title {
+  color: #0000ff;
+  font-weight: bold;
+}
+
+div#activity_log ul li p.time {
+  margin: 5px;
+  color: #555555;
+}
+
+div#activity_log button.more {
+  width: calc(100% - 10px);
+  height: 30px;
+  padding: 0px;
+  margin: 5px;
+  border: solid 1px #000000;
+
+  border-radius: 7px;
+
+  transition: all 0.2s ease;
+}
+
+div#activity_log button.more:active {
+  outline: none;
+}
+
+div#activity_log button.more:focus {
+  outline: none;
+}
+
+div#activity_log button.more:hover {
+  background-color: #dddddd;
+}
+
+div#activity_log button.more:active {
+  background-color: #cccccc;
+}
