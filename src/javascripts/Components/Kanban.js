@@ -76,11 +76,26 @@ export default class Kanban extends Element {
     hover.element.hidden = true;
     const elemBelow = document.elementFromPoint(pageX, pageY);
     const li = elemBelow.closest('li');
+    const column = elemBelow.closest('.column');
     hover.element.hidden = false;
 
     hover.tracking(pageX, pageY);
 
     if (!li || !this.li) {
+      if (column) {
+        const ul = column.querySelector('ul');
+
+        const start = ul.querySelector('.start_point');
+        const { top } = start.getBoundingClientRect();
+
+        if (top > pageY) {
+          // insertfirst
+          ul.insertBefore(this.li, start.nextSibling);
+        } else {
+          // insertlast
+          ul.appendChild(this.li);
+        }
+      }
       return;
     }
 
@@ -108,13 +123,13 @@ export default class Kanban extends Element {
       return;
     }
 
-    this.clicked = true;
     targetRemove = event.target.closest('li');
 
     if (!targetRemove || targetRemove.className === 'start_point') {
       return;
     }
 
+    this.clicked = true;
     this.li = targetRemove.cloneNode(true);
     this.li.classList.add('temp_space');
 
