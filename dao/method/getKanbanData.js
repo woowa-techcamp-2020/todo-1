@@ -19,6 +19,9 @@ module.exports = async function get(kanbanId) {
   if (kanbanRowError) {
     throw kanbanRowError;
   }
+  if (kanbanRow.length === 0) {
+    return undefined;
+  }
 
   const { title } = kanbanRow[0];
 
