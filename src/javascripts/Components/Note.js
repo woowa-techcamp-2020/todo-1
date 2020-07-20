@@ -4,16 +4,16 @@ export default class Note extends Element {
   constructor(data) {
     super();
 
-    this.key = data.key;
-    this.title = data.title;
-    this.name = data.name;
+    this.id = data.id;
+    this.content = data.content;
+    this.user = data.user;
 
     this.setElement();
   }
 
   getWrapper() {
     const li = document.createElement('li');
-    li.dataset.key = this.key;
+    li.dataset.id = this.id;
 
     return li;
   }
@@ -26,7 +26,7 @@ export default class Note extends Element {
     p.innerText = 'Add by';
     const p_writter = document.createElement('p');
     p_writter.className = 'writter';
-    p_writter.innerText = `${this.name}`;
+    p_writter.innerText = `${this.user}`;
     footer.appendChild(p);
     footer.appendChild(p_writter);
 
@@ -36,7 +36,7 @@ export default class Note extends Element {
   getSection() {
     const section = document.createElement('section');
     section.className = 'content';
-    section.innerText = `${this.title}`;
+    section.innerText = `${this.content}`;
 
     return section;
   }
