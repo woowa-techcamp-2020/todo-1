@@ -135,7 +135,7 @@ export default class Column extends Element {
     const count = this.element.querySelector('.count');
     count.innerText = this.notes.length;
 
-    console.log(this.notes);
+    // console.log(this.notes);
   }
 
   appendNote(data) {
@@ -169,7 +169,6 @@ export default class Column extends Element {
       this.form.classList.add('hidden');
     });
     this.textArea.addEventListener('keydown', () => {
-      // console.log(this.textArea.value);
       this.form.classList.remove('disable');
     });
     this.textArea.addEventListener('keyup', () => {
