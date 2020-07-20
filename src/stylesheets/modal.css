@@ -1,0 +1,112 @@
+/* modal base */
+
+.modal-container {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+}
+
+.modal {
+  display: none;
+  margin: 10% auto 0 auto;
+  width: 400px;
+  overflow: auto;
+  box-sizing: border-box;
+  border: 1px solid #939496;
+  background-color: #fff;
+  font-size: 16px;
+}
+
+.modal button {
+  padding: 6px 8px;
+  font-size: 1em;
+}
+
+.modal .header {
+  position: relative;
+  padding: 20px;
+  background: #f6f8fa;
+  border-bottom: 1px solid #939496;
+}
+
+.modal .header .title {
+  font-size: 1.2em;
+  font-weight: 700;
+}
+
+.modal .header .btn-close {
+  position: absolute;
+  top: 18px;
+  right: 19px;
+  cursor: pointer;
+  font-size: 1.3em;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.modal .header .btn-close:focus {
+  outline: 0;
+}
+
+.modal .content {
+  padding: 20px;
+}
+
+.modal .content .message {
+  font-weight: 700;
+}
+
+/* edit-note-modal */
+
+.edit-note-modal .content textarea {
+  width: 100%;
+  max-width: 100%;
+  height: 160px;
+  font-size: 1em;
+  padding: 0;
+  margin: 14px 0;
+}
+
+.edit-note-modal .content .btn-save {
+  padding: 6px 8px;
+  margin: 0;
+}
+
+/* delete-note-modal */
+
+.delete-note-modal .content .message {
+  font-weight: 500;
+}
+
+.delete-note-modal .content .button-box {
+  text-align: right;
+  margin-top: 14px;
+}
+
+.delete-note-modal .content .button-box button {
+  width: 90px;
+  padding: 6px 0px;
+  font-size: 1em;
+}
+
+.delete-note-modal .content .button-box button:first-child {
+  margin-right: 20px;
+}
+
+/* rename-column-modal */
+
+.rename-column-modal .content input[type='text'] {
+  display: block;
+  width: 100%;
+  font-size: 1em;
+  padding: 8px 6px;
+  margin: 14px 0;
+  box-sizing: border-box;
+}
