@@ -103,6 +103,11 @@ export default class Kanban extends Element {
   }
 
   _mousedown(event) {
+    // 왼쪽 클릭 & 터치 이벤트 인 경우에만 동작하도록 설정
+    if (event.button !== 0) {
+      return;
+    }
+
     this.clicked = true;
     targetRemove = event.target.closest('li');
 
