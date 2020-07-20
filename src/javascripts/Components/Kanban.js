@@ -165,6 +165,8 @@ export default class Kanban extends Element {
     if (!this.clicked) {
       return;
     }
+
+    this.clicked = false;
     if (this.li) {
       this.li.classList.remove('temp_space');
 
