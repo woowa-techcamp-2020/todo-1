@@ -18,11 +18,12 @@ let targetData = undefined;
 let columnsMap = new Map();
 
 export default class Kanban extends Element {
-  constructor(data) {
+  constructor(data, modalManager) {
     super();
 
     this.key = data.key;
     this.columns = [];
+    this.modalManager = modalManager;
 
     data.columns.forEach((column) => {
       const columnObject = {
@@ -189,16 +190,35 @@ export default class Kanban extends Element {
     hover.clearInnerDom();
   }
 
-  _dblclick() {
+  _click(e) {
+    // TODO: 이벤트 구현 - 노트 삭제
+    // 모달 오픈
+  }
+
+  _dblclick(e) {
+    // TODO: 이벤트 구현 - 컬럼 제목 수정, 노트 수정
     // double click은 한번 더블클릭 한 뒤에 바로 같은 좌표에서 더블클릭 시 또 다시 발생하지 않음
     // 모달 오픈
   }
 
   setEventListeners() {
-    this.element.addEventListener('mousemove', this._mousemove);
-    this.element.addEventListener('mousedown', this._mousedown);
-    this.element.addEventListener('mouseup', this._mouseup);
-    this.element.addEventListener('mouseleave', this._mouseleave);
-    this.element.addEventListener('dblclick', this._dblclick);
+    this.element.addEventListener('mousemove', (e) => {
+      this._mousemove(e);
+    });
+    this.element.addEventListener('mousedown', (e) => {
+      this._mousedown(e);
+    });
+    this.element.addEventListener('mouseup', (e) => {
+      this._mouseup(e);
+    });
+    this.element.addEventListener('mouseleave', (e) => {
+      this._mouseleave(e);
+    });
+    this.element.addEventListener('click', (e) => {
+      this._click(e);
+    });
+    this.element.addEventListener('dblclick', (e) => {
+      this._dblclick(e);
+    });
   }
 }
