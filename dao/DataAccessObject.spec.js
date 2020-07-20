@@ -18,5 +18,12 @@ test('return a user object', async () => {
     profile_image: '{filename}',
   });
 
+  // dao.endPool();
+});
+
+test('get note rows test', async () => {
+  const kanbanRows = await dao.getKanbanData(1);
+
+  console.log(kanbanRows);
   dao.endPool();
 });

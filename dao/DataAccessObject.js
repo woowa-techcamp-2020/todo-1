@@ -2,10 +2,14 @@ const mysql = require('mysql2');
 const crypto = require('crypto');
 const CONFIG = require('./constants/config');
 const TABLE = require('./constants/table');
+
 const User = require('./dto/User');
 const UserToken = require('./dto/UserToken');
+
 const safePromise = require('../utils/safePromise');
 const dt = require('../utils/datetime');
+
+const getKanbanData = require('./method/getKanbanData');
 
 class DataAccessObject {
   constructor(option) {
@@ -127,5 +131,7 @@ class DataAccessObject {
     return new UserToken(rows[0]);
   }
 }
+
+DataAccessObject.prototype.getKanbanData = getKanbanData;
 
 module.exports = DataAccessObject;
