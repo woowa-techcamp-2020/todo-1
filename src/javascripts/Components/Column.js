@@ -6,14 +6,14 @@ export default class Column extends Element {
     super();
 
     this.notes = [];
-    this.key = data.key;
+    this.id = data.id;
     this.title = data.title;
     this.head = undefined;
     this.ul = undefined;
 
     data.notes.forEach((note) => {
       this.notes.push({
-        key: note.key,
+        id: note.id,
         data: note,
         dom: new Note(note),
       });
@@ -24,7 +24,7 @@ export default class Column extends Element {
 
   getWrapper() {
     const wrapper = document.createElement('div');
-    wrapper.dataset.key = this.key;
+    wrapper.dataset.id = this.id;
     wrapper.className = 'column';
     return wrapper;
   }
@@ -113,7 +113,7 @@ export default class Column extends Element {
 
   pickNote(noteKey) {
     const targetIndex = this.notes.findIndex((cur) => {
-      return cur.key === parseInt(noteKey);
+      return cur.id === parseInt(noteKey);
     });
     if (targetIndex === -1) {
       return;
@@ -140,7 +140,7 @@ export default class Column extends Element {
 
   appendNote(data) {
     const noteObject = {
-      key: data.key,
+      id: data.id,
       data: data,
       dom: new Note(data),
     };
@@ -182,9 +182,9 @@ export default class Column extends Element {
       }
 
       const noteObject = {
-        key: 123,
-        title: this.textArea.value,
-        name: 'ADMIN',
+        id: 123,
+        content: this.textArea.value,
+        user: 'ADMIN',
       };
 
       this.appendNote(noteObject);
