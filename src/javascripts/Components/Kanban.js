@@ -76,11 +76,26 @@ export default class Kanban extends Element {
     hover.element.hidden = true;
     const elemBelow = document.elementFromPoint(pageX, pageY);
     const li = elemBelow.closest('li');
+    const column = elemBelow.closest('.column');
     hover.element.hidden = false;
 
     hover.tracking(pageX, pageY);
 
     if (!li || !this.li) {
+      if (column) {
+        const ul = column.querySelector('ul');
+
+        const start = ul.querySelector('.start_point');
+        const { top } = start.getBoundingClientRect();
+
+        if (top > pageY) {
+          // insertfirst
+          ul.insertBefore(this.li, start.nextSibling);
+        } else {
+          // insertlast
+          ul.appendChild(this.li);
+        }
+      }
       return;
     }
 
@@ -108,21 +123,18 @@ export default class Kanban extends Element {
       return;
     }
 
-    this.clicked = true;
     targetRemove = event.target.closest('li');
 
     if (!targetRemove || targetRemove.className === 'start_point') {
       return;
     }
 
+    this.clicked = true;
     this.li = targetRemove.cloneNode(true);
     this.li.classList.add('temp_space');
 
-    hover.changeInnerDom(
-      targetRemove.cloneNode(true),
-      event.pageX,
-      event.pageY,
-    );
+    hover.changeInnerDom(targetRemove.cloneNode(true));
+    hover.element.hidden = true;
   }
 
   _mouseup() {
@@ -153,6 +165,8 @@ export default class Kanban extends Element {
     if (!this.clicked) {
       return;
     }
+
+    this.clicked = false;
     if (this.li) {
       this.li.classList.remove('temp_space');
 
@@ -175,10 +189,16 @@ export default class Kanban extends Element {
     hover.clearInnerDom();
   }
 
+  _dblclick() {
+    // double click은 한번 더블클릭 한 뒤에 바로 같은 좌표에서 더블클릭 시 또 다시 발생하지 않음
+    // 모달 오픈
+  }
+
   setEventListeners() {
     this.element.addEventListener('mousemove', this._mousemove);
     this.element.addEventListener('mousedown', this._mousedown);
     this.element.addEventListener('mouseup', this._mouseup);
     this.element.addEventListener('mouseleave', this._mouseleave);
+    this.element.addEventListener('dblclick', this._dblclick);
   }
 }

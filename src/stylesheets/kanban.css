@@ -91,7 +91,7 @@ body section {
   background-color: #444444;
 
   text-align: center;
-
+  user-select: none;
   font-size: 0.8rem;
 }
 
@@ -102,6 +102,7 @@ body section {
 
 .kanban .column .head div.buttons {
   margin-right: 5px;
+  user-select: none;
 }
 
 .kanban .column .head div.buttons button {
@@ -133,6 +134,14 @@ body section {
   word-break: break-all;
 
   background-color: #ffffff;
+}
+
+.kanban .column ul li.start_point {
+  height: 0;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
 }
 
 .kanban .column ul li.temp_space {
