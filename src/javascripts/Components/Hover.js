@@ -7,12 +7,9 @@ export default class Hover extends Element {
     this.setElement();
   }
 
-  changeInnerDom(dom, x, y) {
+  changeInnerDom(dom) {
     this.target = dom;
     this.element.appendChild(this.target);
-
-    this.element.style.left = x - this.element.offsetWidth / 2 + 'px';
-    this.element.style.top = y - this.element.offsetHeight / 2 + 'px';
   }
 
   clearInnerDom() {

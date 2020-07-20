@@ -133,11 +133,8 @@ export default class Kanban extends Element {
     this.li = targetRemove.cloneNode(true);
     this.li.classList.add('temp_space');
 
-    hover.changeInnerDom(
-      targetRemove.cloneNode(true),
-      event.pageX,
-      event.pageY,
-    );
+    hover.changeInnerDom(targetRemove.cloneNode(true));
+    hover.element.hidden = true;
   }
 
   _mouseup() {
@@ -190,10 +187,16 @@ export default class Kanban extends Element {
     hover.clearInnerDom();
   }
 
+  _dblclick() {
+    // double click은 한번 더블클릭 한 뒤에 바로 같은 좌표에서 더블클릭 시 또 다시 발생하지 않음
+    // 모달 오픈
+  }
+
   setEventListeners() {
     this.element.addEventListener('mousemove', this._mousemove);
     this.element.addEventListener('mousedown', this._mousedown);
     this.element.addEventListener('mouseup', this._mouseup);
     this.element.addEventListener('mouseleave', this._mouseleave);
+    this.element.addEventListener('dblclick', this._dblclick);
   }
 }
