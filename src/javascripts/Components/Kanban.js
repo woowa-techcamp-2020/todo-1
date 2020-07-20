@@ -21,20 +21,19 @@ export default class Kanban extends Element {
   constructor(data, modalManager) {
     super();
 
-    this.key = data.key;
+    this.id = data.id;
     this.columns = [];
-    this.modalManager = modalManager;
-
     data.columns.forEach((column) => {
       const columnObject = {
-        key: column.key,
+        id: column.id,
         data: column,
         dom: new Column(column),
       };
       this.columns.push(columnObject);
-      columnsMap.set(column.key, columnObject);
+      columnsMap.set(column.id, columnObject);
     });
 
+    this.modalManager = modalManager;
     this.hover = new Hover();
     this.li = undefined;
 
@@ -47,7 +46,7 @@ export default class Kanban extends Element {
     const wrapper = document.createElement('div');
     wrapper.className = 'kanban';
     wrapper.id = 'mytodo';
-    wrapper.dataset.key = this.key;
+    wrapper.dataset.id = this.id;
 
     return wrapper;
   }
@@ -108,10 +107,10 @@ export default class Kanban extends Element {
 
     // delete hover target
     if (targetRemove) {
-      const { key } = targetRemove.closest('.column').dataset;
-      const columnObject = columnsMap.get(parseInt(key)).dom;
+      const { id } = targetRemove.closest('.column').dataset;
+      const columnObject = columnsMap.get(parseInt(id)).dom;
 
-      targetData = columnObject.pickNote(targetRemove.dataset.key);
+      targetData = columnObject.pickNote(targetRemove.dataset.id);
 
       targetRemove.remove();
       targetRemove = undefined;
@@ -143,13 +142,13 @@ export default class Kanban extends Element {
     if (this.li && this.li.closest('.column')) {
       this.li.classList.remove('temp_space');
 
-      const { key } = this.li.closest('.column').dataset;
-      const columnObject = columnsMap.get(parseInt(key)).dom;
+      const { id } = this.li.closest('.column').dataset;
+      const columnObject = columnsMap.get(parseInt(id)).dom;
       const ul = columnObject.element.querySelector('ul');
 
       let index = -1;
       Array.from(ul.children).forEach((cur, idx) => {
-        if (parseInt(cur.dataset.key) === targetData.key) {
+        if (parseInt(cur.dataset.id) === targetData.id) {
           index = idx;
         }
       });
@@ -171,13 +170,13 @@ export default class Kanban extends Element {
     if (this.li) {
       this.li.classList.remove('temp_space');
 
-      const { key } = this.li.closest('.column').dataset;
-      const columnObject = columnsMap.get(parseInt(key)).dom;
+      const { id } = this.li.closest('.column').dataset;
+      const columnObject = columnsMap.get(parseInt(id)).dom;
       const ul = columnObject.element.querySelector('ul');
 
       let index = -1;
       Array.from(ul.children).forEach((cur, idx) => {
-        if (parseInt(cur.dataset.key) === targetData.key) {
+        if (parseInt(cur.dataset.id) === targetData.id) {
           index = idx;
         }
       });
