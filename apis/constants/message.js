@@ -15,4 +15,16 @@ module.exports = {
     TEXT: '알 수 없는 오류가 발생했습니다.',
     STATUS_CODE: 503,
   },
+  GET_KANBAN_SUCCESS: {
+    TEXT: '성공적으로 데이터를 가져왔습니다',
+    STATUS_CODE: 200,
+  },
+  GET_KANBAN_ERROR: {
+    TEXT: '존재하지 않는 kanban입니다',
+    STATUS_CODE: 404,
+  },
+  GET_KANBAN_MYSQL_ERROR: {
+    TEXT: '서버에서 에러가 발생했습니다.',
+    STATUS_CODE: 500,
+  },
 };
