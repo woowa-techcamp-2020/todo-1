@@ -10,7 +10,7 @@ const INSERT_NOTE = `INSERT INTO NOTE
 VALUES (?, ?, ?, null, ?);
 `;
 
-const UPDATE_LAST_NOTE = `UPDATE NOTE
+const UPDATE_FIRST_NOTE = `UPDATE NOTE
 SET prev_note_id = ?
 WHERE id = ?;`;
 
@@ -55,7 +55,7 @@ module.exports = async function setNote(columnId, noteData) {
     // UPDATE NOTE
     // ?: next_note_id, id
     const [updateRow, updateRowError] = await safePromise(
-      this.executeQuery(connection, UPDATE_LAST_NOTE, [insertId, firstNoteId]),
+      this.executeQuery(connection, UPDATE_FIRST_NOTE, [insertId, firstNoteId]),
     );
 
     if (updateRowError) {

@@ -5,6 +5,8 @@ const testPool = require('./constants/poolOptions').test;
 
 const dao = new DataAccessObject(testPool);
 
+let targetNoteId;
+
 test('connect is success.', async () => {
   const success = await dao.isConnectSuccess();
   expect(success).toBe(true);
@@ -33,9 +35,25 @@ test('insert note rows test', async () => {
     content: 'INSERT DAO TEST',
   };
   const note = await dao.createNote(1, newNoteData);
+  targetNoteId = note.id;
 
   expect(note.user).toEqual(newNoteData.user);
   expect(note.content).toEqual(newNoteData.content);
+});
+
+test('update note test', async () => {
+  const content = 'update note content';
+  let noteId = -1;
+  let result;
+
+  result = await dao.updateNote(noteId, content);
+  expect(result).toEqual(false);
+
+  // 이전 insert 문에서 생성된 note의 id를 사용함
+  noteId = targetNoteId;
+  result = await dao.updateNote(noteId, content);
+
+  expect(result).toEqual(true);
 });
 
 afterAll(() => {
