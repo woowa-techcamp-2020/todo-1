@@ -1,6 +1,6 @@
 const safePromise = require('../../utils/safePromise');
 
-const UPDATE_LAST_NOTE = `UPDATE NOTE
+const UPDATE_NOTE = `UPDATE NOTE
 SET content = ?
 WHERE id = ?;`;
 
@@ -17,7 +17,7 @@ module.exports = async function updateNote(noteId, content) {
     // UPDATE NOTE
     // ?: content, noteId
     const [updateRow, updateRowError] = await safePromise(
-      this.executeQuery(connection, UPDATE_LAST_NOTE, [content, noteId]),
+      this.executeQuery(connection, UPDATE_NOTE, [content, noteId]),
     );
 
     if (updateRowError) {
