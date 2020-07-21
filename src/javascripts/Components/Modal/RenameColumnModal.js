@@ -28,9 +28,10 @@ export default class RenameColumnModal extends Modal {
 
     const input = document.createElement('input');
     input.type = 'text';
+    input.class = 'input-field';
 
     const saveButton = document.createElement('button');
-    saveButton.className = 'btn-update';
+    saveButton.className = 'btn-save';
     saveButton.innerText = 'Update Column';
 
     section.appendChild(message);

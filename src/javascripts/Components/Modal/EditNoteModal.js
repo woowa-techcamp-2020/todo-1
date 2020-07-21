@@ -27,6 +27,7 @@ export default class EditNoteModal extends Modal {
     message.innerText = 'Note';
 
     const textarea = document.createElement('textarea');
+    textarea.class = 'input-field';
 
     const saveButton = document.createElement('button');
     saveButton.className = 'btn-save';

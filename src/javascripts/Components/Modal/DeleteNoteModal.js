@@ -27,9 +27,11 @@ export default class DeleteNoteModal extends Modal {
     message.innerText = '선택하신 노트를 삭제하시겠습니까?';
 
     const buttonYes = document.createElement('button');
+    buttonYes.id = 'btnDeleteYes';
     buttonYes.innerText = '예';
 
     const buttonNo = document.createElement('button');
+    buttonNo.className = 'btn-close';
     buttonNo.innerText = '아니오';
 
     const buttonContainer = document.createElement('div');
