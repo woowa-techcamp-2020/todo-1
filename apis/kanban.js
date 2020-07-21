@@ -7,14 +7,14 @@ const MESSAGE = require('./constants/message');
 const router = express.Router();
 
 /**
- * @api {get} /user/:id Request User information
- * @apiName GetUser
- * @apiGroup User
+ * @api {get} /get/:kanbanId Kanban 데이터 요청
+ * @apiName get kanban
+ * @apiGroup Kanban
  *
- * @apiParam {Number} id Users unique ID.
+ * @apiParam {Number} kanbanId kanban 보드의 id [params]
  *
- * @apiSuccess {String} firstname Firstname of the User.
- * @apiSuccess {String} lastname  Lastname of the User.
+ * @apiSuccess {Boolean} success API 호출 성공 여부
+ * @apiSuccess {String} message 응답 결과 메시지
  */
 router.get('/get/:kanbanId', async (req, res) => {
   const result = {
@@ -45,14 +45,17 @@ router.get('/get/:kanbanId', async (req, res) => {
 });
 
 /**
- * @api {get} /user/:id Request User information
- * @apiName GetUser
- * @apiGroup User
+ * @api {put} /column/:columnId Column에 노트 정보를 추가함
+ * @apiName create new note
+ * @apiGroup kanban
  *
- * @apiParam {Number} id Users unique ID.
+ * @apiParam {Number} columnId 칸반보드의 id [params]
+ * @apiParam {String} user 유저의 닉네임 [body]
+ * @apiParam {Number} userId 유저의 id값 [body]
+ * @apiParam {String} content 노트의 내용 [body]
  *
- * @apiSuccess {String} firstname Firstname of the User.
- * @apiSuccess {String} lastname  Lastname of the User.
+ * @apiSuccess {Boolean} success API 호출 성공 여부
+ * @apiSuccess {String} message 응답 결과 메시지
  */
 router.put('/column/:columnId', async (req, res) => {
   const result = {
@@ -85,7 +88,7 @@ router.put('/column/:columnId', async (req, res) => {
 
   result.success = true;
   result.message = MESSAGE.PUT_NOTE_SUCCESS.TEXT;
-  result.data = data;
+  result.data = note;
   res.status(MESSAGE.PUT_NOTE_SUCCESS.STATUS_CODE).json(result);
 });
 
