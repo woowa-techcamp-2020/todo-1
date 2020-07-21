@@ -181,16 +181,34 @@ export default class Column extends Element {
         return;
       }
 
-      const noteObject = {
-        id: 123,
+      const body = {
+        user: 'tester',
+        userId: 1,
         content: this.textArea.value,
-        user: 'ADMIN',
       };
+      fetch(`/api/column/${this.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(body),
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.success) {
+            const noteObject = {
+              id: res.data.id,
+              content: res.data.content,
+              user: res.data.user,
+            };
 
-      this.appendNote(noteObject);
-      this.textArea.value = null;
-      this.form.classList.add('disable');
-      this.form.classList.add('hidden');
+            this.appendNote(noteObject);
+            this.textArea.value = null;
+            this.form.classList.add('disable');
+            this.form.classList.add('hidden');
+          }
+        });
     });
   }
 }
