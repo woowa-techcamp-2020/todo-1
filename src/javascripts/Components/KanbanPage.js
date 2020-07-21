@@ -3,6 +3,7 @@ import Header from './Header.js';
 import Kanban from './Kanban.js';
 import ActivityLog from './ActivityLog.js';
 import ModalManager from './ModalManager.js';
+import Store from '../Store/Store.js';
 
 // eslint-disable-next-line no-unused-vars
 import kanban from '../../stylesheets/kanban.css';
@@ -10,10 +11,12 @@ import kanban from '../../stylesheets/kanban.css';
 export default class KanbanPage extends Element {
   constructor() {
     super();
+    Store.modalManager = new ModalManager();
+
     this.header = new Header();
     this.activityLog = new ActivityLog();
     this.kanban = null;
-    this.modalManager = new ModalManager();
+    this.modalManager = Store.modalManager;
 
     this.setElement();
   }
@@ -31,7 +34,7 @@ export default class KanbanPage extends Element {
       .then((res) => {
         console.log('fetch complete');
 
-        this.kanban = new Kanban(res.data, this.modalManager).render();
+        this.kanban = new Kanban(res.data).render();
         this.element.appendChild(this.kanban);
       });
   }
