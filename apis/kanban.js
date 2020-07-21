@@ -92,4 +92,48 @@ router.put('/column/:columnId', async (req, res) => {
   res.status(MESSAGE.PUT_NOTE_SUCCESS.STATUS_CODE).json(result);
 });
 
+/**
+ * @api {put} /note/:noteId 해당 노트의 정보를 변경함
+ * @apiName update note content
+ * @apiGroup kanban
+ *
+ * @apiParam {Number} noteId 노트의 id [params]
+ * @apiParam {String} 수정할 노트의 내용 [body]
+ *
+ * @apiSuccess {Boolean} success API 호출 성공 여부
+ * @apiSuccess {String} message 응답 결과 메시지
+ */
+router.put('/note/:noteId', async (req, res) => {
+  const result = {
+    success: false,
+    message: '',
+  };
+  const { noteId } = req.params;
+  const { content } = req.body;
+
+  if (!content) {
+    result.message = MESSAGE.PUT_NOTE_ERROR.TEXT;
+    res.status(MESSAGE.PUT_NOTE_ERROR.STATUS_CODE).json(result);
+    return;
+  }
+
+  const [ret, error] = await safePromise(
+    dao.updateNote(parseInt(noteId), content),
+  );
+  if (error) {
+    result.message = MESSAGE.UPDATE_NOTE_BODY_ERROR.TEXT;
+    res.status(MESSAGE.UPDATE_NOTE_BODY_ERROR.STATUS_CODE).json(result);
+    return;
+  }
+  if (!ret) {
+    result.message = MESSAGE.UPDATE_NOTE_ERROR.TEXT;
+    res.status(MESSAGE.UPDATE_NOTE_ERROR.STATUS_CODE).json(result);
+    return;
+  }
+
+  result.success = true;
+  result.message = MESSAGE.UPDATE_NOTE_SUCCESS.TEXT;
+  res.status(MESSAGE.UPDATE_NOTE_SUCCESS.STATUS_CODE).json(result);
+});
+
 module.exports = router;
