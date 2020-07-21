@@ -7,10 +7,6 @@ export default class RenameColumnModal extends Modal {
     this.setElement();
   }
 
-  setNoteText(text) {
-    this.element.querySelector('textarea').value = text;
-  }
-
   getWrapper() {
     const wrapper = document.createElement('div');
     wrapper.className = 'modal rename-column-modal';
@@ -28,7 +24,7 @@ export default class RenameColumnModal extends Modal {
 
     const input = document.createElement('input');
     input.type = 'text';
-    input.class = 'input-field';
+    input.className = 'input-field';
 
     const saveButton = document.createElement('button');
     saveButton.className = 'btn-save';
@@ -51,4 +47,10 @@ export default class RenameColumnModal extends Modal {
 
     this.element = wrapper;
   }
+
+  setInputField(text) {
+    this.element.querySelector('.input-field').value = text;
+  }
+
+  getData() {}
 }

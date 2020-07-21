@@ -74,6 +74,7 @@ body section {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
 }
 
 .kanban .column .head .left {
@@ -98,6 +99,7 @@ body section {
 .kanban .column .head .left h1 {
   margin: 0 0 0 5px;
   font-size: 1rem;
+  user-select: none;
 }
 
 .kanban .column .head div.buttons {

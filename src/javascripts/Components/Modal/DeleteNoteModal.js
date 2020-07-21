@@ -7,10 +7,6 @@ export default class DeleteNoteModal extends Modal {
     this.setElement();
   }
 
-  setNoteText(text) {
-    this.element.querySelector('textarea').value = text;
-  }
-
   getWrapper() {
     const wrapper = document.createElement('div');
     wrapper.className = 'modal delete-note-modal';
@@ -56,4 +52,6 @@ export default class DeleteNoteModal extends Modal {
 
     this.element = wrapper;
   }
+
+  getData() {}
 }

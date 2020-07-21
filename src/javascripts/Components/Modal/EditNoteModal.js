@@ -7,10 +7,6 @@ export default class EditNoteModal extends Modal {
     this.setElement();
   }
 
-  setNoteText(text) {
-    this.element.querySelector('textarea').value = text;
-  }
-
   getWrapper() {
     const wrapper = document.createElement('div');
     wrapper.className = 'modal edit-note-modal';
@@ -19,7 +15,7 @@ export default class EditNoteModal extends Modal {
   }
 
   getSection() {
-    const section = document.createElement('body');
+    const section = document.createElement('section');
     section.className = 'content';
 
     const message = document.createElement('div');
@@ -27,7 +23,7 @@ export default class EditNoteModal extends Modal {
     message.innerText = 'Note';
 
     const textarea = document.createElement('textarea');
-    textarea.class = 'input-field';
+    textarea.className = 'input-field';
 
     const saveButton = document.createElement('button');
     saveButton.className = 'btn-save';
@@ -50,4 +46,10 @@ export default class EditNoteModal extends Modal {
 
     this.element = wrapper;
   }
+
+  setInputField(text) {
+    this.element.querySelector('.input-field').value = text;
+  }
+
+  getData() {}
 }

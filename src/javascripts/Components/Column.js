@@ -1,5 +1,7 @@
 import Element from './Element.js';
 import Note from './Note.js';
+import Store from '../Store/Store.js';
+import { ModalKey } from './Modal/constants.js';
 
 export default class Column extends Element {
   constructor(data) {
@@ -10,6 +12,7 @@ export default class Column extends Element {
     this.title = data.title;
     this.head = undefined;
     this.ul = undefined;
+    this.modalManager = Store.modalManager;
 
     data.notes.forEach((note) => {
       this.notes.push({
@@ -161,7 +164,55 @@ export default class Column extends Element {
     this.element = wrapper;
   }
 
+  editNoteCallback(data) {
+    alert('editNoteCallback!');
+  }
+
+  deleteNoteCallback(data) {
+    alert('deleteNoteCallback!');
+  }
+
+  renameColumnCallback(data) {
+    alert('renameColumnCallback!');
+  }
+
+  _editNoteHandler(e) {
+    if (e.target.tagName === 'BUTTON') {
+      return;
+    }
+
+    // 칸반 마우스다운 방지
+    e.stopPropagation();
+    this.modalManager.open(ModalKey.EditNote, this.editNoteCallback);
+  }
+
+  _deleteNoteHandler(e) {
+    if (e.target.tagName !== 'BUTTON') {
+      return;
+    }
+
+    this.modalManager.open(ModalKey.DeleteNote, this.deleteNoteCallback);
+  }
+
+  _renameColumnHandler(e) {
+    if (e.target.tagName === 'BUTTON') {
+      return;
+    }
+
+    this.modalManager.open(ModalKey.RenameColumn, this.renameColumnCallback);
+  }
+
   setEventListeners() {
+    this.ul.addEventListener('click', (e) => {
+      this._deleteNoteHandler(e);
+    });
+    this.ul.addEventListener('dblclick', (e) => {
+      this._editNoteHandler(e);
+    });
+    this.head.addEventListener('dblclick', (e) => {
+      this._renameColumnHandler(e);
+    });
+
     this.addButton.addEventListener('click', () => {
       this.form.classList.remove('hidden');
     });
@@ -181,6 +232,7 @@ export default class Column extends Element {
         return;
       }
 
+      // TODO: 유저 정보 들어가도록
       const noteObject = {
         id: 123,
         content: this.textArea.value,
