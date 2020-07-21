@@ -1,4 +1,4 @@
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 const crypto = require('crypto');
 const CONFIG = require('./constants/config');
 const TABLE = require('./constants/table');
@@ -16,31 +16,17 @@ class DataAccessObject {
     this.pool = mysql.createPool(option);
   }
 
-  getConnection() {
-    return new Promise((resolve, reject) => {
-      this.pool.getConnection(function (err, connection) {
-        if (err) {
-          return reject(err);
-        }
-        resolve(connection);
-      });
-    });
+  async getConnection() {
+    return await this.pool.getConnection();
   }
 
   endPool() {
     this.pool.end();
   }
 
-  executeQuery(connection, sql, preparedStatement) {
-    return new Promise((resolve, reject) => {
-      connection.execute(sql, preparedStatement, (err, rows) => {
-        if (err) {
-          reject(err);
-        }
-
-        resolve(rows);
-      });
-    });
+  async executeQuery(connection, sql, preparedStatement) {
+    const execute = await connection.execute(sql, preparedStatement);
+    return execute[0];
   }
 
   async isConnectSuccess() {
