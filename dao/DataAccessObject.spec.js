@@ -38,6 +38,20 @@ test('insert note rows test', async () => {
   expect(note.content).toEqual(newNoteData.content);
 });
 
+test('update note test', async () => {
+  const content = 'update note content';
+  let noteId = -1;
+  let result;
+
+  result = await dao.updateNote(noteId, content);
+  expect(result).toEqual(false);
+
+  noteId = 26;
+  result = await dao.updateNote(noteId, content);
+
+  expect(result).toEqual(true);
+});
+
 afterAll(() => {
   dao.endPool();
 });
