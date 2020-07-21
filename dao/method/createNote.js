@@ -22,7 +22,7 @@ module.exports = async function setNote(columnId, noteData) {
   let result = false;
 
   try {
-    // await connection.beginTransaction();
+    await connection.beginTransaction();
 
     // GET LAST NOTE OF THIS COLUMN
     // ?: column_id
@@ -69,9 +69,9 @@ module.exports = async function setNote(columnId, noteData) {
       noteData.userId,
     );
 
-    // await connection.commit();
+    await connection.commit();
   } catch (error) {
-    // connection.rollback();
+    connection.rollback();
   } finally {
     connection.release();
   }

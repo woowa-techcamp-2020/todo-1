@@ -10,6 +10,7 @@ const safePromise = require('../utils/safePromise');
 const dt = require('../utils/datetime');
 
 const getKanbanData = require('./method/getKanbanData');
+const createNote = require('./method/createNote');
 
 class DataAccessObject {
   constructor(option) {
@@ -119,5 +120,6 @@ class DataAccessObject {
 }
 
 DataAccessObject.prototype.getKanbanData = getKanbanData;
+DataAccessObject.prototype.createNote = createNote;
 
 module.exports = DataAccessObject;
