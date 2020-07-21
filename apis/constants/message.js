@@ -27,4 +27,16 @@ module.exports = {
     TEXT: '서버에서 에러가 발생했습니다.',
     STATUS_CODE: 500,
   },
+  PUT_NOTE_SUCCESS: {
+    TEXT: '노트의 추가가 성공적으로 완료되었습니다.',
+    STATUS_CODE: 200,
+  },
+  PUT_NOTE_ERROR: {
+    TEXT: '노트의 추가에 문제가 있습니다',
+    STATUS_CODE: 500,
+  },
+  PUT_NOTE_BODY_ERROR: {
+    TEXT: '데이터의 부족합니다.',
+    STATUS_CODE: 500,
+  },
 };
