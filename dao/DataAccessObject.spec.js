@@ -17,13 +17,27 @@ test('return a user object', async () => {
     name: 'CAMP',
     profile_image: '{filename}',
   });
-
-  // dao.endPool();
 });
 
 test('get note rows test', async () => {
-  const kanbanRows = await dao.getKanbanData(1);
+  const kanban = await dao.getKanbanData(1);
 
-  console.log(kanbanRows);
+  expect(kanban.id).toEqual(1);
+  expect(kanban.title).toEqual('test');
+});
+
+test('insert note rows test', async () => {
+  const newNoteData = {
+    userId: 1,
+    user: 'TEST',
+    content: 'INSERT DAO TEST',
+  };
+  const note = await dao.createNote(1, newNoteData);
+
+  expect(note.user).toEqual(newNoteData.user);
+  expect(note.content).toEqual(newNoteData.content);
+});
+
+afterAll(() => {
   dao.endPool();
 });
