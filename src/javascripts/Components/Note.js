@@ -41,8 +41,14 @@ export default class Note extends Element {
     return section;
   }
 
+  setContent(text) {
+    this.content = text;
+    this.element.querySelector('.content').innerText = text;
+  }
+
   setElement() {
     const wrapper = this.getWrapper();
+    wrapper.className = 'note';
 
     const button = document.createElement('button');
     button.className = 'close';
