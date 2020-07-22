@@ -115,6 +115,19 @@ export default class Column extends Element {
     return form;
   }
 
+  editNote(noteKey, content) {
+    const targetIndex = this.notes.findIndex((cur) => {
+      return cur.id === parseInt(noteKey);
+    });
+    if (targetIndex === -1) {
+      return;
+    }
+
+    const target = this.notes[targetIndex];
+    target.data.content = content;
+    target.dom.setContent(content);
+  }
+
   pickNote(noteKey) {
     const targetIndex = this.notes.findIndex((cur) => {
       return cur.id === parseInt(noteKey);
@@ -165,27 +178,83 @@ export default class Column extends Element {
     this.element = wrapper;
   }
 
-  editNoteCallback(data) {
-    alert(data);
-  }
-
-  deleteNoteCallback(data) {
-    alert(data);
-  }
-
-  renameColumnCallback(data) {
-    alert(data);
-  }
-
-  _editNoteHandler(e) {
-    if (e.target.tagName === 'BUTTON') {
+  editNoteCallback(newText) {
+    const note = Store.moduleCaller;
+    const previousContent = note.querySelector('.content').innerText;
+    if (newText === '' || previousContent === newText) {
       return;
     }
 
-    // 칸반 마우스다운 방지
-    e.stopPropagation();
-    const noteText = e.target.parentNode.querySelector('.content').innerText;
-    this.modalManager.open(ModalKey.EditNote, this.editNoteCallback);
+    const noteId = note.dataset.id;
+    const body = {
+      content: newText,
+    };
+
+    fetch(`/api/note/${noteId}`, {
+      method: 'PUT',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          this.editNote(noteId, newText);
+        } else {
+          alert(res.message);
+        }
+      });
+  }
+
+  deleteNoteCallback(confirm) {
+    if (!confirm) {
+      return;
+    }
+
+    const note = Store.moduleCaller;
+    const noteId = note.dataset.id;
+
+    fetch(`/api/note/${noteId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          this.pickNote(noteId);
+          this.ul.removeChild(note);
+        } else {
+          alert(res.message);
+        }
+      });
+  }
+
+  renameColumnCallback(newText) {
+    if (newText === '') {
+      return;
+    }
+
+    const column = Store.moduleCaller;
+    const columnId = column.dataset.id;
+  }
+
+  _editNoteHandler(e) {
+    const target = e.target;
+    if (target.classList.contains('column')) {
+      return;
+    }
+
+    const note = target.closest('.note');
+    const noteText = note.querySelector('.content').innerText;
+    const callback = this.editNoteCallback.bind(this);
+
+    Store.moduleCaller = note;
+    this.modalManager.open(ModalKey.EditNote, callback);
     this.modalManager.setInputField(noteText);
   }
 
@@ -194,7 +263,10 @@ export default class Column extends Element {
       return;
     }
 
-    this.modalManager.open(ModalKey.DeleteNote, this.deleteNoteCallback);
+    const callback = this.deleteNoteCallback.bind(this);
+
+    Store.moduleCaller = e.target.closest('.note');
+    this.modalManager.open(ModalKey.DeleteNote, callback);
   }
 
   _renameColumnHandler(e) {
@@ -202,8 +274,12 @@ export default class Column extends Element {
       return;
     }
 
-    const titleText = e.target.parentNode.querySelector('.title').innerText;
-    this.modalManager.open(ModalKey.RenameColumn, this.renameColumnCallback);
+    const column = e.target.closest('.column');
+    const titleText = column.querySelector('.title').innerText;
+    const callback = this.renameColumnCallback.bind(this);
+
+    Store.moduleCaller = column;
+    this.modalManager.open(ModalKey.RenameColumn, callback);
     this.modalManager.setInputField(titleText);
   }
 
