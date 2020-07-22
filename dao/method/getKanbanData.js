@@ -35,17 +35,17 @@ module.exports = async function get(kanbanId) {
       FROM 
       (
         SELECT 
-          C.id as 'columnId', C.title as 'columnTitle', N.id as 'noteId', 
+          C.id as 'columnId', C.title as 'columnTitle', N.id as 'noteId', C.order as 'columnOrder',
           N.user_id as 'user_id', N.content as 'content', N.prev_note_id as 'prevNoteId', 
           N.next_note_id as 'nextNoteId'
         FROM \`COLUMN\` as C 
         LEFT JOIN NOTE as N
         ON C.id = N.column_id 
         WHERE C.kanban_id = ?
-        ORDER BY C.order
       ) AS J
       LEFT JOIN USER AS U
-      ON J.user_id = U.id`,
+      ON J.user_id = U.id
+      ORDER BY columnOrder`,
       [kanbanId],
     ),
   );
