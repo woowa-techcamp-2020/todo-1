@@ -155,8 +155,6 @@ export default class Kanban extends Element {
       const afterNoteId =
         nextNote && nextNote.dataset.id ? nextNote.dataset.id : null;
 
-      console.log(beforeNoteId, afterNoteId);
-
       const body = {
         beforeNoteId,
         afterNoteId,
