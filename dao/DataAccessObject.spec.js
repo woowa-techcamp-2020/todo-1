@@ -64,6 +64,27 @@ test('delete note test', async () => {
   expect(result).toEqual(true);
 });
 
+test('move note test', async () => {
+  // 이전 insert 문에서 생성된 note의 id를 사용함
+  const noteId = 1;
+  let result;
+
+  result = await dao.moveNote(noteId, 3, 4);
+  expect(result).toEqual(true);
+
+  result = await dao.moveNote(noteId, null, 3);
+  expect(result).toEqual(true);
+
+  result = await dao.moveNote(noteId, 7, null);
+  expect(result).toEqual(true);
+
+  result = await dao.moveNote(noteId, null, 33);
+  expect(result).toEqual(true);
+
+  result = await dao.moveNote(noteId, null, null);
+  expect(result).toEqual(false);
+});
+
 afterAll(() => {
   dao.endPool();
 });

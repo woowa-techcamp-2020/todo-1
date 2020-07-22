@@ -13,6 +13,7 @@ const getKanbanData = require('./method/getKanbanData');
 const createNote = require('./method/createNote');
 const updateNote = require('./method/updateNote');
 const deleteNote = require('./method/deleteNote');
+const moveNote = require('./method/moveNote');
 
 class DataAccessObject {
   constructor(option) {
@@ -125,5 +126,6 @@ DataAccessObject.prototype.getKanbanData = getKanbanData;
 DataAccessObject.prototype.createNote = createNote;
 DataAccessObject.prototype.updateNote = updateNote;
 DataAccessObject.prototype.deleteNote = deleteNote;
+DataAccessObject.prototype.moveNote = moveNote;
 
 module.exports = DataAccessObject;
