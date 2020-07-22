@@ -1,4 +1,4 @@
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 const crypto = require('crypto');
 const CONFIG = require('./constants/config');
 const TABLE = require('./constants/table');
@@ -10,37 +10,26 @@ const safePromise = require('../utils/safePromise');
 const dt = require('../utils/datetime');
 
 const getKanbanData = require('./method/getKanbanData');
+const createNote = require('./method/createNote');
+const updateNote = require('./method/updateNote');
+const deleteNote = require('./method/deleteNote');
 
 class DataAccessObject {
   constructor(option) {
     this.pool = mysql.createPool(option);
   }
 
-  getConnection() {
-    return new Promise((resolve, reject) => {
-      this.pool.getConnection(function (err, connection) {
-        if (err) {
-          return reject(err);
-        }
-        resolve(connection);
-      });
-    });
+  async getConnection() {
+    return await this.pool.getConnection();
   }
 
   endPool() {
     this.pool.end();
   }
 
-  executeQuery(connection, sql, preparedStatement) {
-    return new Promise((resolve, reject) => {
-      connection.execute(sql, preparedStatement, (err, rows) => {
-        if (err) {
-          reject(err);
-        }
-
-        resolve(rows);
-      });
-    });
+  async executeQuery(connection, sql, preparedStatement) {
+    const execute = await connection.execute(sql, preparedStatement);
+    return execute[0];
   }
 
   async isConnectSuccess() {
@@ -133,5 +122,8 @@ class DataAccessObject {
 }
 
 DataAccessObject.prototype.getKanbanData = getKanbanData;
+DataAccessObject.prototype.createNote = createNote;
+DataAccessObject.prototype.updateNote = updateNote;
+DataAccessObject.prototype.deleteNote = deleteNote;
 
 module.exports = DataAccessObject;
