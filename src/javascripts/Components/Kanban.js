@@ -143,8 +143,8 @@ export default class Kanban extends Element {
     if (this.li && this.li.closest('.column')) {
       this.li.classList.remove('temp_space');
 
-      const { id } = this.li.closest('.column').dataset;
-      const columnObject = this.columnsMap.get(parseInt(id)).dom;
+      const { id: columnId } = this.li.closest('.column').dataset;
+      const columnObject = this.columnsMap.get(parseInt(columnId)).dom;
       const ul = columnObject.element.querySelector('ul');
 
       const prevNote = this.li.previousSibling;
@@ -157,13 +157,10 @@ export default class Kanban extends Element {
 
       console.log(beforeNoteId, afterNoteId);
 
-      if (!beforeNoteId && !afterNoteId) {
-        // 컬럼에 노트가 없는 경우 이동시킬 때
-      }
-
       const body = {
         beforeNoteId,
         afterNoteId,
+        columnId,
       };
 
       fetch(`/api/note/move/${this.li.dataset.id}`, {
