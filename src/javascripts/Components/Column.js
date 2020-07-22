@@ -1,5 +1,7 @@
 import Element from './Element.js';
 import Note from './Note.js';
+import Store from '../Store/Store.js';
+import { ModalKey } from './Modal/constants.js';
 
 export default class Column extends Element {
   constructor(data) {
@@ -10,6 +12,7 @@ export default class Column extends Element {
     this.title = data.title;
     this.head = undefined;
     this.ul = undefined;
+    this.modalManager = Store.modalManager;
 
     data.notes.forEach((note) => {
       this.notes.push({
@@ -40,6 +43,7 @@ export default class Column extends Element {
     count.innerText = this.notes.length;
 
     const h1 = document.createElement('h1');
+    h1.className = 'title';
     h1.innerText = this.title;
 
     left_dom.appendChild(count);
@@ -161,7 +165,59 @@ export default class Column extends Element {
     this.element = wrapper;
   }
 
+  editNoteCallback(data) {
+    alert(data);
+  }
+
+  deleteNoteCallback(data) {
+    alert(data);
+  }
+
+  renameColumnCallback(data) {
+    alert(data);
+  }
+
+  _editNoteHandler(e) {
+    if (e.target.tagName === 'BUTTON') {
+      return;
+    }
+
+    // 칸반 마우스다운 방지
+    e.stopPropagation();
+    const noteText = e.target.parentNode.querySelector('.content').innerText;
+    this.modalManager.open(ModalKey.EditNote, this.editNoteCallback);
+    this.modalManager.setInputField(noteText);
+  }
+
+  _deleteNoteHandler(e) {
+    if (e.target.tagName !== 'BUTTON') {
+      return;
+    }
+
+    this.modalManager.open(ModalKey.DeleteNote, this.deleteNoteCallback);
+  }
+
+  _renameColumnHandler(e) {
+    if (e.target.tagName === 'BUTTON') {
+      return;
+    }
+
+    const titleText = e.target.parentNode.querySelector('.title').innerText;
+    this.modalManager.open(ModalKey.RenameColumn, this.renameColumnCallback);
+    this.modalManager.setInputField(titleText);
+  }
+
   setEventListeners() {
+    this.ul.addEventListener('click', (e) => {
+      this._deleteNoteHandler(e);
+    });
+    this.ul.addEventListener('dblclick', (e) => {
+      this._editNoteHandler(e);
+    });
+    this.head.addEventListener('dblclick', (e) => {
+      this._renameColumnHandler(e);
+    });
+
     this.addButton.addEventListener('click', () => {
       this.form.classList.remove('hidden');
     });

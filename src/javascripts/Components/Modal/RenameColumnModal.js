@@ -4,11 +4,13 @@ export default class RenameColumnModal extends Modal {
   constructor() {
     super();
 
+    this.inputField = null;
+    this.saveButton = null;
     this.setElement();
   }
 
-  setNoteText(text) {
-    this.element.querySelector('textarea').value = text;
+  setFocusWhenOpened() {
+    this.inputField.focus();
   }
 
   getWrapper() {
@@ -26,15 +28,19 @@ export default class RenameColumnModal extends Modal {
     message.className = 'message';
     message.innerText = 'Column Name';
 
-    const input = document.createElement('input');
-    input.type = 'text';
+    const inputField = document.createElement('input');
+    inputField.type = 'text';
+    inputField.className = 'input-field';
+    inputField.maxLength = 50;
+    this.inputField = inputField;
 
     const saveButton = document.createElement('button');
-    saveButton.className = 'btn-update';
+    saveButton.className = 'btn-save';
     saveButton.innerText = 'Update Column';
+    this.saveButton = saveButton;
 
     section.appendChild(message);
-    section.appendChild(input);
+    section.appendChild(inputField);
     section.appendChild(saveButton);
 
     return section;
@@ -49,5 +55,26 @@ export default class RenameColumnModal extends Modal {
     wrapper.appendChild(section);
 
     this.element = wrapper;
+  }
+
+  setEventListeners() {
+    this.inputField.addEventListener('keydown', () => {
+      if (this.inputField.value.length > 0) {
+        this.saveButton.disabled = false;
+      }
+    });
+    this.inputField.addEventListener('keyup', () => {
+      if (this.inputField.value.length < 1) {
+        this.saveButton.disabled = true;
+      }
+    });
+  }
+
+  setInputField(text) {
+    this.inputField.value = text;
+  }
+
+  getData() {
+    return this.inputField.value;
   }
 }

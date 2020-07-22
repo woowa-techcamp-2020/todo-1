@@ -13,6 +13,10 @@ export default class Modal extends Element {
   show() {
     this.element.parentNode.style.display = Display.true;
     this.element.style.display = Display.true;
+    this.element.parentNode.focus();
+    if (this.setFocusWhenOpened) {
+      this.setFocusWhenOpened();
+    }
   }
 
   hide() {

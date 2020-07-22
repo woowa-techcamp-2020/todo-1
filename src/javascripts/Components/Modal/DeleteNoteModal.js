@@ -1,14 +1,11 @@
 import Modal from './Modal.js';
+import { isYesterday } from 'date-fns';
 
 export default class DeleteNoteModal extends Modal {
   constructor() {
     super();
 
     this.setElement();
-  }
-
-  setNoteText(text) {
-    this.element.querySelector('textarea').value = text;
   }
 
   getWrapper() {
@@ -27,9 +24,11 @@ export default class DeleteNoteModal extends Modal {
     message.innerText = '선택하신 노트를 삭제하시겠습니까?';
 
     const buttonYes = document.createElement('button');
+    buttonYes.id = 'btnDeleteNote';
     buttonYes.innerText = '예';
 
     const buttonNo = document.createElement('button');
+    buttonNo.className = 'btn-close';
     buttonNo.innerText = '아니오';
 
     const buttonContainer = document.createElement('div');
@@ -53,5 +52,9 @@ export default class DeleteNoteModal extends Modal {
     wrapper.appendChild(section);
 
     this.element = wrapper;
+  }
+
+  getData() {
+    return true;
   }
 }
