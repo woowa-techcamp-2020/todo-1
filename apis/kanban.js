@@ -136,4 +136,34 @@ router.put('/note/:noteId', async (req, res) => {
   res.status(MESSAGE.UPDATE_NOTE_SUCCESS.STATUS_CODE).json(result);
 });
 
+/**
+ * @api {delete} /note/:noteId 해당 노트를 삭제함
+ * @apiName delete note
+ * @apiGroup kanban
+ *
+ * @apiParam {Number} noteId 노트의 id [params]
+ *
+ * @apiSuccess {Boolean} success API 호출 성공 여부
+ * @apiSuccess {String} message 응답 결과 메시지
+ */
+router.delete('/note/:noteId', async (req, res) => {
+  const result = {
+    success: false,
+    message: '',
+  };
+  const { noteId } = req.params;
+
+  const [ret, error] = await safePromise(dao.deleteNote(parseInt(noteId)));
+
+  if (error || !ret) {
+    result.message = MESSAGE.DELETE_NOTE_ERROR.TEXT;
+    res.status(MESSAGE.DELETE_NOTE_ERROR.STATUS_CODE).json(result);
+    return;
+  }
+
+  result.success = true;
+  result.message = MESSAGE.DELETE_NOTE_SUCCESS.TEXT;
+  res.status(MESSAGE.DELETE_NOTE_SUCCESS.STATUS_CODE).json(result);
+});
+
 module.exports = router;

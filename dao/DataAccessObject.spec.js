@@ -56,6 +56,14 @@ test('update note test', async () => {
   expect(result).toEqual(true);
 });
 
+test('delete note test', async () => {
+  // 이전 insert 문에서 생성된 note의 id를 사용함
+  const noteId = targetNoteId;
+  const result = await dao.deleteNote(noteId);
+
+  expect(result).toEqual(true);
+});
+
 afterAll(() => {
   dao.endPool();
 });

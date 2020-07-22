@@ -51,4 +51,12 @@ module.exports = {
     TEXT: '데이터의 부족합니다.',
     STATUS_CODE: 500,
   },
+  DELETE_NOTE_SUCCESS: {
+    TEXT: '노트의 삭제가 성공적으로 이루어졌습니다.',
+    STATUS_CODE: 200,
+  },
+  DELETE_NOTE_ERROR: {
+    TEXT: '노트를 삭제하지 못했습니다.',
+    STATUS_CODE: 500,
+  },
 };
