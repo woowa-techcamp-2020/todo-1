@@ -53,6 +53,19 @@ export default class RenameColumnModal extends Modal {
     this.element = wrapper;
   }
 
+  setEventListeners() {
+    this.inputField.addEventListener('keydown', () => {
+      if (this.inputField.value.length > 0) {
+        this.saveButton.disabled = false;
+      }
+    });
+    this.inputField.addEventListener('keyup', () => {
+      if (this.inputField.value.length < 1) {
+        this.saveButton.disabled = true;
+      }
+    });
+  }
+
   setInputField(text) {
     this.inputField.value = text;
   }

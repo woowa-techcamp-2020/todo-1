@@ -52,6 +52,19 @@ export default class EditNoteModal extends Modal {
     this.element = wrapper;
   }
 
+  setEventListeners() {
+    this.textarea.addEventListener('keydown', () => {
+      if (this.textarea.value.length > 0) {
+        this.saveButton.disabled = false;
+      }
+    });
+    this.textarea.addEventListener('keyup', () => {
+      if (this.textarea.value.length < 1) {
+        this.saveButton.disabled = true;
+      }
+    });
+  }
+
   setInputField(text) {
     this.textarea.value = text;
   }
