@@ -139,6 +139,7 @@ export default class Kanban extends Element {
 
   _mouseup() {
     this.clicked = false;
+
     if (this.li && this.li.closest('.column')) {
       this.li.classList.remove('temp_space');
 
@@ -146,17 +147,48 @@ export default class Kanban extends Element {
       const columnObject = this.columnsMap.get(parseInt(id)).dom;
       const ul = columnObject.element.querySelector('ul');
 
-      let index = -1;
-      Array.from(ul.children).forEach((cur, idx) => {
-        if (parseInt(cur.dataset.id) === this.targetData.id) {
-          index = idx;
-        }
-      });
+      const prevNote = this.li.previousSibling;
+      const nextNote = this.li.nextSibling;
 
-      columnObject.pushNote(this.targetData, index - 1);
+      const beforeNoteId =
+        prevNote && prevNote.dataset.id ? prevNote.dataset.id : null;
+      const afterNoteId =
+        nextNote && nextNote.dataset.id ? nextNote.dataset.id : null;
 
-      this.targetData = undefined;
-      this.li = undefined;
+      console.log(beforeNoteId, afterNoteId);
+
+      if (!beforeNoteId && !afterNoteId) {
+        // 컬럼에 노트가 없는 경우 이동시킬 때
+      }
+
+      const body = {
+        beforeNoteId,
+        afterNoteId,
+      };
+
+      fetch(`/api/note/move/${this.li.dataset.id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(body),
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.success) {
+            let index = -1;
+            Array.from(ul.children).forEach((cur, idx) => {
+              if (parseInt(cur.dataset.id) === this.targetData.id) {
+                index = idx;
+              }
+            });
+
+            columnObject.pushNote(this.targetData, index - 1);
+          }
+          this.targetData = undefined;
+          this.li = undefined;
+        });
     }
     this.hover.clearInnerDom();
   }
