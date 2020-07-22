@@ -4,6 +4,25 @@ const Kanban = require('../dto/Kanban');
 const Column = require('../dto/Column');
 const Note = require('../dto/Note');
 
+const SELECT_KANBAN = `SELECT 
+J.columnId as 'columnId', J.columnTitle as 'columnTitle', 
+J.noteId as 'noteId', J.user_id as 'user_id', U.name as 'userName', 
+J.content as 'content', J.prevNoteId as 'prevNoteId', J.nextNoteId as 'nextNoteId'
+FROM 
+(
+SELECT 
+  C.id as 'columnId', C.title as 'columnTitle', N.id as 'noteId', C.order as 'columnOrder',
+  N.user_id as 'user_id', N.content as 'content', N.prev_note_id as 'prevNoteId', 
+  N.next_note_id as 'nextNoteId'
+FROM \`COLUMN\` as C 
+LEFT JOIN NOTE as N
+ON C.id = N.column_id 
+WHERE C.kanban_id = ?
+) AS J
+LEFT JOIN USER AS U
+ON J.user_id = U.id
+ORDER BY columnOrder`;
+
 module.exports = async function get(kanbanId) {
   const [connection, connectionError] = await safePromise(this.getConnection());
   if (connectionError) {
@@ -26,28 +45,7 @@ module.exports = async function get(kanbanId) {
   const { title } = kanbanRow[0];
 
   const [rows, rowsError] = await safePromise(
-    this.executeQuery(
-      connection,
-      `SELECT 
-        J.columnId as 'columnId', J.columnTitle as 'columnTitle', 
-        J.noteId as 'noteId', J.user_id as 'user_id', U.name as 'userName', 
-        J.content as 'content', J.prevNoteId as 'prevNoteId', J.nextNoteId as 'nextNoteId'
-      FROM 
-      (
-        SELECT 
-          C.id as 'columnId', C.title as 'columnTitle', N.id as 'noteId', C.order as 'columnOrder',
-          N.user_id as 'user_id', N.content as 'content', N.prev_note_id as 'prevNoteId', 
-          N.next_note_id as 'nextNoteId'
-        FROM \`COLUMN\` as C 
-        LEFT JOIN NOTE as N
-        ON C.id = N.column_id 
-        WHERE C.kanban_id = ?
-      ) AS J
-      LEFT JOIN USER AS U
-      ON J.user_id = U.id
-      ORDER BY columnOrder`,
-      [kanbanId],
-    ),
+    this.executeQuery(connection, SELECT_KANBAN, [kanbanId]),
   );
 
   if (rowsError) {
@@ -68,16 +66,18 @@ module.exports = async function get(kanbanId) {
       columnsMap.set(row.columnId, column);
     }
 
-    if (row.prevNoteId === null) {
+    if (row.prevNoteId === null && row.noteId) {
       startsMap.set(row.columnId, row.noteId);
     }
 
-    const note = new Note(row.noteId, row.content, row.userName);
-    notesMap.set(row.noteId, {
-      data: note,
-      prevId: row.prevNoteId,
-      nextId: row.nextNoteId,
-    });
+    if (row.noteId) {
+      const note = new Note(row.noteId, row.content, row.userName);
+      notesMap.set(row.noteId, {
+        data: note,
+        prevId: row.prevNoteId,
+        nextId: row.nextNoteId,
+      });
+    }
   });
 
   columnsMap.forEach((column) => {

@@ -48,31 +48,36 @@ async function checkCorrectLink(
   afterId,
   columnId,
 ) {
+  if (!beforeId || !afterId) {
+    return true;
+  }
   // READ LINK NOTES
   // prev_note_id, next_note_id
   const [rows, error] = await safePromise(
     query(connection, READ_LINK_NOTES, [beforeId, afterId]),
   );
+
   if (error || rows.length === 0 || rows.length > 2) {
     return false;
   }
+
   const firstNote = {
+    id: rows[0].id,
     next_note_id: rows[0].next_note_id,
     prev_note_id: rows[0].prev_note_id,
-    column_id: rows[0].columnId,
-  };
-  const secondNote = {
-    next_note_id: rows[1].next_note_id,
-    prev_note_id: rows[1].prev_note_id,
-    column_id: rows[1].columnId,
+    column_id: rows[0].column_id,
   };
 
   if (firstNote.column_id !== columnId) {
     return false;
   }
-  if (!beforeId || !afterId) {
-    return true;
-  }
+
+  const secondNote = {
+    id: rows[1].id,
+    next_note_id: rows[1].next_note_id,
+    prev_note_id: rows[1].prev_note_id,
+    column_id: rows[1].column_id,
+  };
 
   // 연결 관계가 유효한지 check
   return (

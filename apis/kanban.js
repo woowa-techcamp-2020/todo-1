@@ -190,8 +190,9 @@ router.patch('/note/move/:noteId', async (req, res) => {
 
   beforeNoteId = isNaN(parseInt(beforeNoteId)) ? null : parseInt(beforeNoteId);
   afterNoteId = isNaN(parseInt(afterNoteId)) ? null : parseInt(afterNoteId);
+  columnId = isNaN(parseInt(columnId)) ? null : parseInt(columnId);
 
-  if ((!beforeNoteId && !afterNoteId) || !columnId) {
+  if (!columnId) {
     result.message = MESSAGE.MOVE_NOTE_BODY_ERROR.TEXT;
     res.status(MESSAGE.MOVE_NOTE_BODY_ERROR.STATUS_CODE).json(result);
     return;
