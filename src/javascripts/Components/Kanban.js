@@ -2,6 +2,11 @@ import Element from './Element.js';
 import Column from './Column.js';
 import Hover from './Hover.js';
 
+/**
+ * element2가 element1 앞에 존재하는지 확인
+ * @param {Element} element1 target element
+ * @param {Element} element2 검사를 시작하는 element
+ */
 function isBefore(element1, element2) {
   let cur;
   if (element2.parentNode === element1.parentNode) {
@@ -12,17 +17,13 @@ function isBefore(element1, element2) {
   return false;
 }
 
-let hover = undefined;
-let targetRemove = undefined;
-let targetData = undefined;
-let columnsMap = new Map();
-
 export default class Kanban extends Element {
   constructor(data) {
     super();
 
     this.id = data.id;
     this.columns = [];
+    this.columnsMap = new Map();
     data.columns.forEach((column) => {
       const columnObject = {
         id: column.id,
@@ -30,13 +31,13 @@ export default class Kanban extends Element {
         dom: new Column(column),
       };
       this.columns.push(columnObject);
-      columnsMap.set(column.id, columnObject);
+      this.columnsMap.set(column.id, columnObject);
     });
 
     this.hover = new Hover();
     this.li = undefined;
-
-    hover = this.hover;
+    this.targetRemove = undefined;
+    this.targetData = undefined;
 
     this.setElement();
   }
@@ -72,13 +73,13 @@ export default class Kanban extends Element {
     const { pageX, pageY } = event;
 
     // 잠시 현재 hover element를 가리고 현재 좌표의 element를 가져온다
-    hover.element.hidden = true;
+    this.hover.element.hidden = true;
     const elemBelow = document.elementFromPoint(pageX, pageY);
     const li = elemBelow.closest('li');
     const column = elemBelow.closest('.column');
-    hover.element.hidden = false;
+    this.hover.element.hidden = false;
 
-    hover.tracking(pageX, pageY);
+    this.hover.tracking(pageX, pageY);
 
     if (!li || !this.li) {
       if (column) {
@@ -105,14 +106,14 @@ export default class Kanban extends Element {
     }
 
     // delete hover target
-    if (targetRemove) {
-      const { id } = targetRemove.closest('.column').dataset;
-      const columnObject = columnsMap.get(parseInt(id)).dom;
+    if (this.targetRemove) {
+      const { id } = this.targetRemove.closest('.column').dataset;
+      const columnObject = this.columnsMap.get(parseInt(id)).dom;
 
-      targetData = columnObject.pickNote(targetRemove.dataset.id);
+      this.targetData = columnObject.pickNote(this.targetRemove.dataset.id);
 
-      targetRemove.remove();
-      targetRemove = undefined;
+      this.targetRemove.remove();
+      this.targetRemove = undefined;
     }
   }
 
@@ -122,18 +123,18 @@ export default class Kanban extends Element {
       return;
     }
 
-    targetRemove = event.target.closest('li');
+    this.targetRemove = event.target.closest('li');
 
-    if (!targetRemove || targetRemove.className === 'start_point') {
+    if (!this.targetRemove || this.targetRemove.className === 'start_point') {
       return;
     }
 
     this.clicked = true;
-    this.li = targetRemove.cloneNode(true);
+    this.li = this.targetRemove.cloneNode(true);
     this.li.classList.add('temp_space');
 
-    hover.changeInnerDom(targetRemove.cloneNode(true));
-    hover.element.hidden = true;
+    this.hover.changeInnerDom(this.targetRemove.cloneNode(true));
+    this.hover.element.hidden = true;
   }
 
   _mouseup() {
@@ -142,50 +143,29 @@ export default class Kanban extends Element {
       this.li.classList.remove('temp_space');
 
       const { id } = this.li.closest('.column').dataset;
-      const columnObject = columnsMap.get(parseInt(id)).dom;
+      const columnObject = this.columnsMap.get(parseInt(id)).dom;
       const ul = columnObject.element.querySelector('ul');
 
       let index = -1;
       Array.from(ul.children).forEach((cur, idx) => {
-        if (parseInt(cur.dataset.id) === targetData.id) {
+        if (parseInt(cur.dataset.id) === this.targetData.id) {
           index = idx;
         }
       });
 
-      columnObject.pushNote(targetData, index - 1);
+      columnObject.pushNote(this.targetData, index - 1);
 
-      targetData = undefined;
+      this.targetData = undefined;
       this.li = undefined;
     }
-    hover.clearInnerDom();
+    this.hover.clearInnerDom();
   }
 
   _mouseleave() {
     if (!this.clicked) {
       return;
     }
-
-    this.clicked = false;
-    if (this.li) {
-      this.li.classList.remove('temp_space');
-
-      const { id } = this.li.closest('.column').dataset;
-      const columnObject = columnsMap.get(parseInt(id)).dom;
-      const ul = columnObject.element.querySelector('ul');
-
-      let index = -1;
-      Array.from(ul.children).forEach((cur, idx) => {
-        if (parseInt(cur.dataset.id) === targetData.id) {
-          index = idx;
-        }
-      });
-
-      columnObject.pushNote(targetData, index - 1);
-
-      targetData = undefined;
-      this.li = undefined;
-    }
-    hover.clearInnerDom();
+    this._mouseup();
   }
 
   setEventListeners() {
