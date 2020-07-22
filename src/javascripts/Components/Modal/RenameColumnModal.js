@@ -4,6 +4,8 @@ export default class RenameColumnModal extends Modal {
   constructor() {
     super();
 
+    this.inputField = null;
+    this.saveButton = null;
     this.setElement();
   }
 
@@ -22,16 +24,19 @@ export default class RenameColumnModal extends Modal {
     message.className = 'message';
     message.innerText = 'Column Name';
 
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.className = 'input-field';
+    const inputField = document.createElement('input');
+    inputField.type = 'text';
+    inputField.className = 'input-field';
+    inputField.maxLength = 50;
+    this.inputField = inputField;
 
     const saveButton = document.createElement('button');
     saveButton.className = 'btn-save';
     saveButton.innerText = 'Update Column';
+    this.saveButton = saveButton;
 
     section.appendChild(message);
-    section.appendChild(input);
+    section.appendChild(inputField);
     section.appendChild(saveButton);
 
     return section;
@@ -49,8 +54,10 @@ export default class RenameColumnModal extends Modal {
   }
 
   setInputField(text) {
-    this.element.querySelector('.input-field').value = text;
+    this.inputField.value = text;
   }
 
-  getData() {}
+  getData() {
+    return this.inputField.value;
+  }
 }

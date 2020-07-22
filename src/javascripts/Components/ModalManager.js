@@ -86,7 +86,10 @@ export default class ModalManager extends Element {
       return;
     }
 
-    if (target.classList.contains('btn-save') || target.id === 'btnDeleteYes') {
+    if (
+      target.classList.contains('btn-save') ||
+      target.id === 'btnDeleteNote'
+    ) {
       const data = modal.getData();
       this.callback(data);
       modal.hide();

@@ -43,6 +43,7 @@ export default class Column extends Element {
     count.innerText = this.notes.length;
 
     const h1 = document.createElement('h1');
+    h1.className = 'title';
     h1.innerText = this.title;
 
     left_dom.appendChild(count);
@@ -165,15 +166,15 @@ export default class Column extends Element {
   }
 
   editNoteCallback(data) {
-    alert('editNoteCallback!');
+    alert(data);
   }
 
   deleteNoteCallback(data) {
-    alert('deleteNoteCallback!');
+    alert(data);
   }
 
   renameColumnCallback(data) {
-    alert('renameColumnCallback!');
+    alert(data);
   }
 
   _editNoteHandler(e) {
@@ -183,7 +184,9 @@ export default class Column extends Element {
 
     // 칸반 마우스다운 방지
     e.stopPropagation();
+    const noteText = e.target.parentNode.querySelector('.content').innerText;
     this.modalManager.open(ModalKey.EditNote, this.editNoteCallback);
+    this.modalManager.setInputField(noteText);
   }
 
   _deleteNoteHandler(e) {
@@ -199,7 +202,9 @@ export default class Column extends Element {
       return;
     }
 
+    const titleText = e.target.parentNode.querySelector('.title').innerText;
     this.modalManager.open(ModalKey.RenameColumn, this.renameColumnCallback);
+    this.modalManager.setInputField(titleText);
   }
 
   setEventListeners() {
