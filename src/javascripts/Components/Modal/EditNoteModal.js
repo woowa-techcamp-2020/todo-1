@@ -9,6 +9,10 @@ export default class EditNoteModal extends Modal {
     this.setElement();
   }
 
+  setFocusWhenOpened() {
+    this.textarea.focus();
+  }
+
   getWrapper() {
     const wrapper = document.createElement('div');
     wrapper.className = 'modal edit-note-modal';

@@ -9,6 +9,10 @@ export default class RenameColumnModal extends Modal {
     this.setElement();
   }
 
+  setFocusWhenOpened() {
+    this.inputField.focus();
+  }
+
   getWrapper() {
     const wrapper = document.createElement('div');
     wrapper.className = 'modal rename-column-modal';
