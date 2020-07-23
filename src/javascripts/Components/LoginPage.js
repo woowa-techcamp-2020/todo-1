@@ -1,5 +1,6 @@
 import Element from './Element.js';
 import UserList from './UserList.js';
+import Store from '../Store/Store.js';
 
 // eslint-disable-next-line no-unused-vars
 import login from '../../stylesheets/login.css';
@@ -41,7 +42,7 @@ const requestAccessToken = (userId) => {
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
-        window.location.href = '/kanban';
+        Store.router.href('/kanban');
         return;
       }
 
@@ -60,7 +61,10 @@ export default class LoginPage extends Element {
 
   fetchUserList() {
     setTimeout(() => {
-      this.userList = new UserList(data, requestAccessToken).render();
+      this.userList = new UserList(
+        data,
+        requestAccessToken.bind(this),
+      ).render();
       this.element.appendChild(this.userList);
     }, 0);
   }

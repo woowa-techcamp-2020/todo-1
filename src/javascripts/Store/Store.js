@@ -1,5 +1,6 @@
 class Store {
   constructor() {
+    this.router = null;
     this.modalManager = null;
     this.userPermissions = {
       1: {
