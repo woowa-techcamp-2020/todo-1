@@ -344,8 +344,8 @@ export default class Column extends Element {
       }
 
       const body = {
-        user: 'tester',
-        userId: 1,
+        user: Store.user.name,
+        userId: Store.user.id,
         content: this.textArea.value,
       };
       fetch(`/api/column/${this.id}`, {
@@ -369,6 +369,8 @@ export default class Column extends Element {
             this.textArea.value = null;
             this.form.classList.add('disable');
             this.form.classList.add('hidden');
+          } else {
+            alert(res.message);
           }
         });
     });
