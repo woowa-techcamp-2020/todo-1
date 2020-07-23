@@ -6,7 +6,6 @@ module.exports = {
   mode: 'development',
   entry: {
     kanban: './src/app.js',
-    login: './src/app_login.js',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -37,16 +36,9 @@ module.exports = {
       patterns: [{ from: 'src/static' }],
     }),
     new HtmlPlugin({
-      title: '로그인',
-      hash: true,
-      filename: 'index.html',
-      chunks: ['login'], // entry에서 해당 리스트만 포함
-      template: './src/index.html',
-    }),
-    new HtmlPlugin({
       title: '칸반',
       hash: true,
-      filename: 'kanban.html',
+      filename: 'index.html',
       excludeChunks: ['login'], // entry에서 해당 리스트를 제외한 나머지
       template: './src/index.html',
     }),
