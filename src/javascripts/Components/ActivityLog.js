@@ -62,7 +62,6 @@ export default class ActivityLog extends Element {
   }
 
   appendLi(data) {
-    data.time = '1 분전';
     const log = new Log(data);
     this.ul.appendChild(log.render());
   }

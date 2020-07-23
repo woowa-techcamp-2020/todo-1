@@ -5,7 +5,7 @@ const Log = require('../dto/Log');
 const SIZE = 4;
 
 const READ_NOTE_LINK = `SELECT 
-id, \`type\`, method, user_name, note_title, column_title, column_to_title, change_title
+id, \`type\`, method, user_name, note_title, column_title, column_to_title, change_title, created_at
 FROM ACTIVITY_LOG
 ORDER BY created_at DESC
 LIMIT ${SIZE} OFFSET ?;`;
