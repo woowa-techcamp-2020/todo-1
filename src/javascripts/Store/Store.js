@@ -17,8 +17,9 @@ class Store {
       },
     };
     this.user = {
-      name: 'superman',
-      permission: this.userPermissions[1],
+      id: null,
+      name: null,
+      permission: null,
     };
   }
 }
