@@ -46,6 +46,11 @@ export default class KanbanPage extends Element {
   }
 
   runWhenRender() {
+    if (Store.user.id === null && !Store.isRequestTokenInfo) {
+      alert('로그인이 필요합니다.');
+      window.location.href = '/';
+      return;
+    }
     this.fetchKanbanData();
   }
 
