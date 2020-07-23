@@ -119,7 +119,7 @@ router.put('/note/:noteId', async (req, res) => {
     message: '',
   };
   const { noteId } = req.params;
-  const { content } = req.body;
+  const { content, contentBefore, userName } = req.body;
 
   if (!content) {
     result.message = MESSAGE.PUT_NOTE_ERROR.TEXT;
@@ -144,9 +144,8 @@ router.put('/note/:noteId', async (req, res) => {
   const logData = {
     method: CONSTANT_LOG.METHOD.MODIFY,
     type: CONSTANT_LOG.TYPE.NOTE,
-    userName: 'body에 인자로 유저정보가 필요함',
-    noteTitle: content,
-    columnTitle: 'body에 인자로 column 아이디가 필요함',
+    userName: userName,
+    noteTitle: contentBefore,
     changeTitle: content,
   };
   await safePromise(dao.createLog(logData));
@@ -172,6 +171,7 @@ router.delete('/note/:noteId', async (req, res) => {
     message: '',
   };
   const { noteId } = req.params;
+  const { userName, noteTitle } = req.body;
 
   const [ret, error] = await safePromise(dao.deleteNote(parseInt(noteId)));
 
@@ -184,9 +184,8 @@ router.delete('/note/:noteId', async (req, res) => {
   const logData = {
     method: CONSTANT_LOG.METHOD.DELETE,
     type: CONSTANT_LOG.TYPE.NOTE,
-    userName: 'body에 인자로 유저정보가 필요함',
-    noteTitle: 'body에 인자로 note 정보가 필요함',
-    columnTitle: 'body에 인자로 column 아이디가 필요함',
+    userName: userName,
+    noteTitle: noteTitle,
   };
   await safePromise(dao.createLog(logData));
 
@@ -253,7 +252,6 @@ router.patch('/note/move/:noteId', async (req, res) => {
     columnTitle: columnTitle,
     columnToTitle: columnToTitle,
   };
-  console.log(logData);
   await safePromise(dao.createLog(logData));
 
   result.success = true;
