@@ -51,6 +51,10 @@ router.post(
 
     result.success = true;
     result.message = MESSAGE.LOGIN_SUCCESS.TEXT;
+    result.info = {
+      id: user.id,
+      name: user.name,
+    };
 
     res.cookie(CONFIG.COOKIE_NAME, token, {
       maxAge: CONFIG.COOKIE_MAX_AGE,

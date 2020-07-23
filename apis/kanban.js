@@ -4,6 +4,7 @@ const safePromise = require('../utils/safePromise');
 
 const MESSAGE = require('./constants/message');
 const CONSTANT_LOG = require('../dao/constants/log');
+const RULE = require('./constants/rule.js');
 
 const router = express.Router();
 
@@ -257,6 +258,51 @@ router.patch('/note/move/:noteId', async (req, res) => {
   result.success = true;
   result.message = MESSAGE.MOVE_NOTE_SUCCESS.TEXT;
   res.status(MESSAGE.MOVE_NOTE_SUCCESS.STATUS_CODE).json(result);
+});
+
+/**
+ * @api {patch} /column/rename/:columnId 해당 컬럼 타이틀 변경
+ * @apiName rename column
+ * @apiGroup kanban
+ *
+ * @apiParam {Number} columnId 컬럼의 id [params]
+ * @apiParam {Number} title 변경될 타이틀 내용 [body]
+ *
+ * @apiSuccess {Boolean} success API 호출 성공 여부
+ * @apiSuccess {String} message 응답 결과 메시지
+ */
+router.patch('/column/rename/:columnId', async (req, res) => {
+  const result = {
+    success: false,
+    message: '',
+  };
+
+  const { columnId } = req.params;
+  let { title } = req.body;
+
+  if (
+    !title ||
+    title.length > RULE.COLUMN_TITLE.maxLength ||
+    title.length < RULE.COLUMN_TITLE.minLength
+  ) {
+    result.message = MESSAGE.RENAME_COLUMN_BODY_ERROR.TEXT;
+    res.status(MESSAGE.RENAME_COLUMN_BODY_ERROR.STATUS_CODE).json(result);
+    return;
+  }
+
+  const [ret, error] = await safePromise(
+    dao.renameColumn(parseInt(columnId), title),
+  );
+
+  if (error || !ret) {
+    result.message = MESSAGE.RENAME_COLUMN_ERROR.TEXT;
+    res.status(MESSAGE.RENAME_COLUMN_ERROR.STATUS_CODE).json(result);
+    return;
+  }
+
+  result.success = true;
+  result.message = MESSAGE.RENAME_COLUMN_SUCCESS.TEXT;
+  res.status(MESSAGE.RENAME_COLUMN_SUCCESS.STATUS_CODE).json(result);
 });
 
 module.exports = router;
