@@ -15,6 +15,7 @@ const updateNote = require('./method/updateNote');
 const deleteNote = require('./method/deleteNote');
 const moveNote = require('./method/moveNote');
 const createLog = require('./method/createLog');
+const readLogs = require('./method/readLogs');
 
 class DataAccessObject {
   constructor(option) {
@@ -129,5 +130,6 @@ DataAccessObject.prototype.updateNote = updateNote;
 DataAccessObject.prototype.deleteNote = deleteNote;
 DataAccessObject.prototype.moveNote = moveNote;
 DataAccessObject.prototype.createLog = createLog;
+DataAccessObject.prototype.readLogs = readLogs;
 
 module.exports = DataAccessObject;
