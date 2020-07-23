@@ -131,7 +131,7 @@ export default class Kanban extends Element {
     this.clicked = true;
     this.li = this.targetRemove.cloneNode(true);
     this.beforeColumnId = columnObject.id;
-    this.beforeColumnTitle = columnObject.data.title;
+    this.beforeColumnTitle = columnObject.title;
 
     this.li.classList.add('temp_space');
 
@@ -162,7 +162,7 @@ export default class Kanban extends Element {
         afterNoteId,
         columnId,
         userName: 'hardcoding admin',
-        noteTitle: this.targetData.data.content,
+        noteTitle: this.targetData.content,
         columnTitle: this.beforeColumnTitle,
         columnToTitle: columnObject.title,
       };
