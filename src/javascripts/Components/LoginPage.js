@@ -42,12 +42,12 @@ const requestAccessToken = (userId) => {
     .then((response) => response.json())
     .then((data) => {
       if (data.success) {
-        Store.router.href('/kanban');
         Store.user = {
           id: data.info.id,
           name: data.info.name,
-          permission: Store.userPermissions[userId],
+          permission: Store.userPermissions[data.info.id],
         };
+        Store.router.href('/kanban');
         return;
       }
 

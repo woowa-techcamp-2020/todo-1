@@ -6,14 +6,26 @@ class Store {
       1: {
         read: true,
         move: true,
-        edit: false,
-        delete: false,
+        edit: true,
+        delete: true,
       },
       2: {
         read: true,
         move: true,
         edit: false,
         delete: false,
+      },
+      3: {
+        read: true,
+        move: true,
+        edit: true,
+        delete: false,
+      },
+      4: {
+        read: true,
+        move: true,
+        edit: false,
+        delete: true,
       },
     };
     this.user = {
