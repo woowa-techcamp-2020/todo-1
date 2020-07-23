@@ -35,11 +35,11 @@ function checkLink(firstNote, secondNote) {
 
 /**
  * 입력받은 인자의 유효성 검사
- * @param {*} connection  mysql2 connection 객체
- * @param {*} query       query를 실행하는 함수
- * @param {*} beforeId    연결 구조에서 앞에 위치한 노트
- * @param {*} afterId     연결 구조에서 뒤에 위치한 노트
- * @param {*} columnId    검사 하고자 하는 column의 id
+ * @param {Object} connection  mysql2 connection 객체
+ * @param {Function} query       query를 실행하는 함수
+ * @param {Number} beforeId    연결 구조에서 앞에 위치한 노트
+ * @param {Number} afterId     연결 구조에서 뒤에 위치한 노트
+ * @param {Number} columnId    검사 하고자 하는 column의 id
  */
 async function checkCorrectLink(
   connection,
