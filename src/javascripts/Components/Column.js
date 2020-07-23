@@ -125,6 +125,7 @@ export default class Column extends Element {
 
     const target = this.notes[targetIndex];
     target.data.content = content;
+    target.dom.setDom(this.ul.querySelector(`li[data-id='${noteKey}']`));
     target.dom.setContent(content);
   }
 
