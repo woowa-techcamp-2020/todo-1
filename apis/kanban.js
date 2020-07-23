@@ -215,7 +215,15 @@ router.patch('/note/move/:noteId', async (req, res) => {
   };
 
   const { noteId } = req.params;
-  let { beforeNoteId, afterNoteId, columnId } = req.body;
+  let {
+    beforeNoteId,
+    afterNoteId,
+    columnId,
+    userName,
+    noteTitle,
+    columnTitle,
+    columnToTitle,
+  } = req.body;
 
   beforeNoteId = isNaN(parseInt(beforeNoteId)) ? null : parseInt(beforeNoteId);
   afterNoteId = isNaN(parseInt(afterNoteId)) ? null : parseInt(afterNoteId);
@@ -240,10 +248,12 @@ router.patch('/note/move/:noteId', async (req, res) => {
   const logData = {
     method: CONSTANT_LOG.METHOD.MOVE,
     type: CONSTANT_LOG.TYPE.NOTE,
-    userName: 'body에 인자로 유저정보가 필요함',
-    noteTitle: 'body에 인자로 note 정보가 필요함',
-    columnTitle: 'body에 인자로 column 아이디가 필요함',
+    userName: userName,
+    noteTitle: noteTitle,
+    columnTitle: columnTitle,
+    columnToTitle: columnToTitle,
   };
+  console.log(logData);
   await safePromise(dao.createLog(logData));
 
   result.success = true;

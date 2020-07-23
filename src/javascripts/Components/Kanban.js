@@ -34,6 +34,8 @@ export default class Kanban extends Element {
       this.columnsMap.set(column.id, columnObject);
     });
 
+    this.beforeColumnTitle = undefined;
+    this.beforeColumnId = undefined;
     this.hover = new Hover();
     this.li = undefined;
     this.targetRemove = undefined;
@@ -124,13 +126,17 @@ export default class Kanban extends Element {
     }
 
     this.targetRemove = event.target.closest('li');
-
     if (!this.targetRemove || this.targetRemove.className === 'start_point') {
       return;
     }
+    const { id: columnId } = this.targetRemove.closest('.column').dataset;
+    const columnObject = this.columnsMap.get(parseInt(columnId));
 
     this.clicked = true;
     this.li = this.targetRemove.cloneNode(true);
+    this.beforeColumnId = columnObject.id;
+    this.beforeColumnTitle = columnObject.data.title;
+
     this.li.classList.add('temp_space');
 
     this.hover.changeInnerDom(this.targetRemove.cloneNode(true));
@@ -159,6 +165,10 @@ export default class Kanban extends Element {
         beforeNoteId,
         afterNoteId,
         columnId,
+        userName: 'hardcoding admin',
+        noteTitle: this.targetData.data.content,
+        columnTitle: this.beforeColumnTitle,
+        columnToTitle: columnObject.title,
       };
 
       fetch(`/api/note/move/${this.li.dataset.id}`, {
@@ -183,6 +193,8 @@ export default class Kanban extends Element {
           }
           this.targetData = undefined;
           this.li = undefined;
+          this.beforeColumnId = undefined;
+          this.beforeColumnTitle = undefined;
         });
     }
     this.hover.clearInnerDom();
