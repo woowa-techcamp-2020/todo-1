@@ -1,9 +1,9 @@
 class UserToken {
   constructor(attrs) {
     this.id = attrs?.id;
-    this.userId = attrs?.userId;
+    this.userId = attrs?.userId ?? attrs?.user_id;
     this.token = attrs?.token;
-    this.expiredAt = attrs?.expiredAt;
+    this.expiredAt = attrs?.expiredAt ?? attrs?.expired_at;
   }
 }
 
