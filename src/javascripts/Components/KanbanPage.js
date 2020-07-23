@@ -45,11 +45,14 @@ export default class KanbanPage extends Element {
     });
   }
 
+  runWhenRender() {
+    this.fetchKanbanData();
+  }
+
   setElement() {
     const wrapper = document.createElement('div');
 
     wrapper.appendChild(this.header.render());
-    this.fetchKanbanData();
     wrapper.appendChild(this.activityLog.render());
     wrapper.appendChild(this.modalManager.render());
 
