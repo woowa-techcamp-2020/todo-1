@@ -30,11 +30,10 @@ module.exports = async function setNote(columnId, noteData) {
       this.executeQuery(connection, SELECT_LAST_NOTE, [columnId]),
     );
 
-    if (firstNoteRow.length === 0 || lastNoteRowError) {
+    if (lastNoteRowError) {
       throw new Error();
     }
-
-    const firstNoteId = firstNoteRow[0].id;
+    const firstNoteId = firstNoteRow.length > 0 ? firstNoteRow[0].id : null;
 
     // INSERT NOTE
     // ?: column_id, user_id, content, prev_note_id
@@ -50,21 +49,27 @@ module.exports = async function setNote(columnId, noteData) {
     if (noteRowError) {
       throw new Error();
     }
+
     const { insertId } = noteRow;
 
-    // UPDATE NOTE
-    // ?: next_note_id, id
-    const [updateRow, updateRowError] = await safePromise(
-      this.executeQuery(connection, UPDATE_FIRST_NOTE, [insertId, firstNoteId]),
-    );
+    if (firstNoteRow.length !== 0) {
+      // UPDATE NOTE
+      // ?: next_note_id, id
+      const [updateRow, updateRowError] = await safePromise(
+        this.executeQuery(connection, UPDATE_FIRST_NOTE, [
+          insertId,
+          firstNoteId,
+        ]),
+      );
 
-    if (updateRowError) {
-      throw new Error();
-    }
+      if (updateRowError) {
+        throw new Error();
+      }
 
-    // 하나의 note만 update하지 않은경우
-    if (updateRow.affectedRows !== 1) {
-      throw new Error();
+      // 하나의 note만 update하지 않은경우
+      if (updateRow.affectedRows !== 1) {
+        throw new Error();
+      }
     }
 
     result = new Note(
@@ -73,7 +78,6 @@ module.exports = async function setNote(columnId, noteData) {
       noteData.user,
       noteData.userId,
     );
-
     await connection.commit();
   } catch (error) {
     connection.rollback();
