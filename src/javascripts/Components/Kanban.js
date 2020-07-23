@@ -25,11 +25,7 @@ export default class Kanban extends Element {
     this.columns = [];
     this.columnsMap = new Map();
     data.columns.forEach((column) => {
-      const columnObject = {
-        id: column.id,
-        data: column,
-        dom: new Column(column),
-      };
+      const columnObject = new Column(column);
       this.columns.push(columnObject);
       this.columnsMap.set(column.id, columnObject);
     });
@@ -53,7 +49,7 @@ export default class Kanban extends Element {
 
   addColumn(wrapper) {
     this.columns.forEach((column) => {
-      wrapper.appendChild(column.dom.render());
+      wrapper.appendChild(column.render());
     });
   }
 
@@ -108,7 +104,7 @@ export default class Kanban extends Element {
     // delete hover target
     if (this.targetRemove) {
       const { id } = this.targetRemove.closest('.column').dataset;
-      const columnObject = this.columnsMap.get(parseInt(id)).dom;
+      const columnObject = this.columnsMap.get(parseInt(id));
 
       this.targetData = columnObject.pickNote(this.targetRemove.dataset.id);
 
@@ -144,7 +140,7 @@ export default class Kanban extends Element {
       this.li.classList.remove('temp_space');
 
       const { id: columnId } = this.li.closest('.column').dataset;
-      const columnObject = this.columnsMap.get(parseInt(columnId)).dom;
+      const columnObject = this.columnsMap.get(parseInt(columnId));
       const ul = columnObject.element.querySelector('ul');
 
       const prevNote = this.li.previousSibling;
