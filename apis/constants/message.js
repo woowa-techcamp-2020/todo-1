@@ -15,6 +15,19 @@ module.exports = {
     TEXT: '알 수 없는 오류가 발생했습니다.',
     STATUS_CODE: 503,
   },
+  GET_USER_SUCCESS: {
+    TEXT: '성공적으로 데이터를 가져왔습니다.',
+    STATUS_CODE: 200,
+  },
+  GET_USER_CANNOT_FOUND_TOKEN: {
+    TEXT: '토큰 정보를 확인할 수 없습니다.',
+    STATUS_CODE: 400,
+  },
+  GET_USER_ERROR: {
+    TEXT: '오류가 발생했습니다.',
+    STATUS_CODE: 500,
+  },
+
   GET_KANBAN_SUCCESS: {
     TEXT: '성공적으로 데이터를 가져왔습니다',
     STATUS_CODE: 200,

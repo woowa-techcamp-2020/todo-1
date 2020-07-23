@@ -63,4 +63,48 @@ router.post(
   },
 );
 
+router.get('/user/info', async (req, res, next) => {
+  const result = {
+    success: false,
+    message: '',
+  };
+
+  const cookieToken = req.cookies[CONFIG.COOKIE_NAME];
+  if (!cookieToken) {
+    result.message = MESSAGE.GET_USER_CANNOT_FOUND_TOKEN.TEXT;
+    res.status(MESSAGE.GET_USER_CANNOT_FOUND_TOKEN.STATUS_CODE).json(result);
+    return;
+  }
+
+  const [tokenInfo, tokenInfoError] = await safePromise(
+    dao.getTokenInfo(cookieToken),
+  );
+
+  if (tokenInfoError) {
+    result.message = MESSAGE.GET_USER_CANNOT_FOUND_TOKEN.TEXT;
+    res.status(MESSAGE.GET_USER_CANNOT_FOUND_TOKEN.STATUS_CODE).json(result);
+    return;
+  }
+
+  const [user, userError] = await safePromise(
+    dao.getUserById(tokenInfo.userId),
+  );
+
+  // 만료 여부 추가 필요
+  if (userError) {
+    result.message = MESSAGE.GET_USER_CANNOT_FOUND_TOKEN.TEXT;
+    res.status(MESSAGE.GET_USER_CANNOT_FOUND_TOKEN.STATUS_CODE).json(result);
+    return;
+  }
+
+  result.success = true;
+  result.message = MESSAGE.GET_USER_SUCCESS.TEXT;
+  result.info = {
+    id: user.id,
+    name: user.name,
+  };
+
+  res.status(MESSAGE.GET_USER_SUCCESS.STATUS_CODE).json(result);
+});
+
 module.exports = router;
