@@ -264,6 +264,11 @@ export default class Column extends Element {
       return;
     }
 
+    if (!Store.user.permission.edit) {
+      alert('수정 권한이 없습니다.');
+      return;
+    }
+
     const note = target.closest('.note');
     const noteText = note.querySelector('.content').innerText;
     const callback = this.editNoteCallback.bind(this);
@@ -278,6 +283,11 @@ export default class Column extends Element {
       return;
     }
 
+    if (!Store.user.permission.delete) {
+      alert('삭제 권한이 없습니다.');
+      return;
+    }
+
     const callback = this.deleteNoteCallback.bind(this);
 
     Store.moduleCaller = e.target.closest('.note');
@@ -286,6 +296,11 @@ export default class Column extends Element {
 
   _renameColumnHandler(e) {
     if (e.target.tagName === 'BUTTON') {
+      return;
+    }
+
+    if (!Store.user.permission.edit) {
+      alert('수정 권한이 없습니다.');
       return;
     }
 
