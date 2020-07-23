@@ -41,6 +41,10 @@ export default class Note extends Element {
     return section;
   }
 
+  setDom(dom) {
+    this.element = dom;
+  }
+
   setContent(text) {
     this.content = text;
     this.element.querySelector('.content').innerText = text;
