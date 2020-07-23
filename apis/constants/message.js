@@ -71,4 +71,16 @@ module.exports = {
     TEXT: '노트를 이동하지 못했습니다.',
     STATUS_CODE: 500,
   },
+  RENAME_COLUMN_SUCCESS: {
+    TEXT: '컬럼 이름 수정이 성공적으로 이루어졌습니다.',
+    STATUS_CODE: 200,
+  },
+  RENAME_COLUMN_BODY_ERROR: {
+    TEXT: '올바르지 않은 전송입니다.',
+    STATUS_CODE: 400,
+  },
+  RENAME_COLUMN_ERROR: {
+    TEXT: '컬럼 이름 수정에 실패했습니다.',
+    STATUS_CODE: 500,
+  },
 };

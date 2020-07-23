@@ -169,6 +169,11 @@ export default class Column extends Element {
     );
   }
 
+  setTitle(title) {
+    this.title = title;
+    this.element.querySelector('.title').innerText = title;
+  }
+
   setElement() {
     const wrapper = this.getWrapper();
 
@@ -235,13 +240,34 @@ export default class Column extends Element {
       });
   }
 
-  renameColumnCallback(newText) {
-    if (newText === '') {
+  renameColumnCallback(newTitle) {
+    const column = Store.moduleCaller;
+    const currentTitle = column.querySelector('.title').innerText;
+    if (newTitle === '' || currentTitle === newTitle) {
       return;
     }
 
-    const column = Store.moduleCaller;
     const columnId = column.dataset.id;
+    const body = {
+      title: newTitle,
+    };
+
+    fetch(`/api/column/rename/${columnId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success) {
+          this.setTitle(newTitle);
+        } else {
+          alert(res.message);
+        }
+      });
   }
 
   _editNoteHandler(e) {
