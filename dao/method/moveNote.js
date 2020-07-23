@@ -103,18 +103,6 @@ module.exports = async function moveNote(
     await connection.beginTransaction();
     let rows, error;
 
-    const isCorrectLink = await checkCorrectLink(
-      connection,
-      this.executeQuery,
-      beforeNoteId,
-      afterNoteId,
-      columnId,
-    );
-
-    if (!isCorrectLink) {
-      throw new Error();
-    }
-
     /**
      * 이전 노트와의 연결 관계를 끊어줌
      */
@@ -150,6 +138,18 @@ module.exports = async function moveNote(
           next_note_id,
         ]),
       )[0];
+    }
+
+    const isCorrectLink = await checkCorrectLink(
+      connection,
+      this.executeQuery,
+      beforeNoteId,
+      afterNoteId,
+      columnId,
+    );
+
+    if (!isCorrectLink) {
+      throw new Error();
     }
 
     /**
