@@ -14,6 +14,8 @@ const createNote = require('./method/createNote');
 const updateNote = require('./method/updateNote');
 const deleteNote = require('./method/deleteNote');
 const moveNote = require('./method/moveNote');
+const createLog = require('./method/createLog');
+const readLogs = require('./method/readLogs');
 const renameColumn = require('./method/renameColumn');
 
 class DataAccessObject {
@@ -128,6 +130,8 @@ DataAccessObject.prototype.createNote = createNote;
 DataAccessObject.prototype.updateNote = updateNote;
 DataAccessObject.prototype.deleteNote = deleteNote;
 DataAccessObject.prototype.moveNote = moveNote;
+DataAccessObject.prototype.createLog = createLog;
+DataAccessObject.prototype.readLogs = readLogs;
 DataAccessObject.prototype.renameColumn = renameColumn;
 
 module.exports = DataAccessObject;

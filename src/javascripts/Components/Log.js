@@ -4,11 +4,13 @@ export default class Log extends Element {
   constructor(data) {
     super();
 
-    this.user = data.user;
+    this.id = data.id;
+    this.user = data.userName;
     this.noteTitle = data.noteTitle;
     this.method = data.method;
-    this.columnFrom = data.columnFrom;
-    this.columnTo = data.columnTo;
+    this.columnFrom = data.columnTitle;
+    this.columnTo = data.columnToTitle;
+    this.changeTitle = data.changeTitle;
     this.time = data.time;
 
     this.setElement();
@@ -24,32 +26,45 @@ export default class Log extends Element {
     const log = document.createElement('div');
     log.className = 'log';
 
-    const userP = document.createElement('p');
-    userP.className = 'user';
-    userP.innerText = this.user;
-    const methodP = document.createElement('p');
-    methodP.innerText = this.method;
-    const noteTitleP = document.createElement('p');
-    noteTitleP.className = 'title';
-    noteTitleP.innerText = this.noteTitle;
-    const fromP = document.createElement('p');
-    fromP.innerText = 'from';
-    const columnFromP = document.createElement('p');
-    columnFromP.innerText = this.columnFrom;
-    const toP = document.createElement('p');
-    toP.innerText = 'to';
-    const columnToP = document.createElement('p');
-    columnToP.innerText = this.columnTo;
+    switch (this.method) {
+      case 'CREATE': {
+        log.innerHTML = `<p class="user">${
+          this.user
+        }</p><p>${this.method.toLowerCase()}</p><p class="title">${
+          this.noteTitle
+        }</p><p>at</p><p>${this.columnFrom}</p>`;
 
-    log.appendChild(userP);
-    log.appendChild(methodP);
-    log.appendChild(noteTitleP);
-    log.appendChild(fromP);
-    log.appendChild(columnFromP);
+        break;
+      }
+      case 'MOVE': {
+        log.innerHTML = `<p class="user">${
+          this.user
+        }</p><p>${this.method.toLowerCase()}</p><p class="title">${
+          this.noteTitle
+        }</p><p>from</p><p>${this.columnFrom}</p><p>to</p><p>${
+          this.columnTo
+        }</p>`;
 
-    if (this.method === 'moved') {
-      log.appendChild(toP);
-      log.appendChild(columnToP);
+        break;
+      }
+      case 'MODIFY': {
+        log.innerHTML = `<p class="user">${
+          this.user
+        }</p><p>${this.method.toLowerCase()}</p><p class="title">${
+          this.noteTitle
+        }</p><p>to</p><p>${this.changeTitle}</p>`;
+
+        break;
+      }
+      case 'DELETE': {
+        log.innerHTML = `<p class="user">${
+          this.user
+        }</p><p>${this.method.toLowerCase()}</p><p class="title">${
+          this.noteTitle
+        }</p><p>at</p><p>${this.columnFrom}</p>`;
+
+        break;
+      }
     }
 
     return log;

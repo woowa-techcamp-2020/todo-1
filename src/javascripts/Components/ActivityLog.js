@@ -4,27 +4,13 @@ import Log from './Log.js';
 // eslint-disable-next-line no-unused-vars
 import style from '../../stylesheets/activityLog.css';
 
-const mockData = {
-  user: '@hello',
-  noteTitle: '집에가기',
-  method: 'moved',
-  columnFrom: 'Todo',
-  columnTo: 'Done',
-  time: '1 min ago',
-};
-
-const mockDatas = [];
-
-for (let i = 0; i < 10; i++) {
-  mockDatas.push(mockData);
-}
-
 export default class ActivityLog extends Element {
   constructor() {
     super();
 
     this.logs = [];
 
+    this.page = 1;
     this.wrapper = undefined;
     this.closeButton = undefined;
     this.ul = undefined;
@@ -76,19 +62,50 @@ export default class ActivityLog extends Element {
   }
 
   appendLi(data) {
+    data.time = '1 분전';
     const log = new Log(data);
     this.ul.appendChild(log.render());
   }
 
+  hideMoreButton() {
+    this.moreButton.hidden = true;
+  }
+
   fetchData() {
-    mockDatas.forEach((data) => {
-      this.logs.push(data);
-      this.appendLi(data);
-    });
+    fetch(`/api/log/${this.page}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        const logs = res.data;
+
+        if (logs && logs.length !== 0) {
+          logs.forEach((data) => {
+            this.logs.push(data);
+            this.appendLi(data);
+          });
+          this.page += 1;
+        } else {
+          this.hideMoreButton();
+        }
+      });
   }
 
   openActivityLog() {
+    this.ul.innerHTML = '';
+    this.moreButton.hidden = false;
+    this.resetPage();
+    this.fetchData();
+
     this.element.classList.remove('close');
+  }
+
+  resetPage() {
+    this.page = 1;
   }
 
   setElement() {

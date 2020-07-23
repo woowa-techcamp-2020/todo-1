@@ -3,6 +3,7 @@ const dao = require('../dao/dao.js');
 const safePromise = require('../utils/safePromise');
 
 const MESSAGE = require('./constants/message');
+const CONSTANT_LOG = require('../dao/constants/log');
 const RULE = require('./constants/rule.js');
 
 const router = express.Router();
@@ -87,6 +88,15 @@ router.put('/column/:columnId', async (req, res) => {
     return;
   }
 
+  const logData = {
+    method: CONSTANT_LOG.METHOD.CREATE,
+    type: CONSTANT_LOG.TYPE.NOTE,
+    userName: user,
+    noteTitle: content,
+    columnTitle: 'body에 인자로 column 아이디가 필요함',
+  };
+  await safePromise(dao.createLog(logData));
+
   result.success = true;
   result.message = MESSAGE.PUT_NOTE_SUCCESS.TEXT;
   result.data = note;
@@ -110,7 +120,7 @@ router.put('/note/:noteId', async (req, res) => {
     message: '',
   };
   const { noteId } = req.params;
-  const { content } = req.body;
+  const { content, contentBefore, userName } = req.body;
 
   if (!content) {
     result.message = MESSAGE.PUT_NOTE_ERROR.TEXT;
@@ -131,6 +141,15 @@ router.put('/note/:noteId', async (req, res) => {
     res.status(MESSAGE.UPDATE_NOTE_ERROR.STATUS_CODE).json(result);
     return;
   }
+
+  const logData = {
+    method: CONSTANT_LOG.METHOD.MODIFY,
+    type: CONSTANT_LOG.TYPE.NOTE,
+    userName: userName,
+    noteTitle: contentBefore,
+    changeTitle: content,
+  };
+  await safePromise(dao.createLog(logData));
 
   result.success = true;
   result.message = MESSAGE.UPDATE_NOTE_SUCCESS.TEXT;
@@ -153,6 +172,7 @@ router.delete('/note/:noteId', async (req, res) => {
     message: '',
   };
   const { noteId } = req.params;
+  const { userName, noteTitle } = req.body;
 
   const [ret, error] = await safePromise(dao.deleteNote(parseInt(noteId)));
 
@@ -161,6 +181,14 @@ router.delete('/note/:noteId', async (req, res) => {
     res.status(MESSAGE.DELETE_NOTE_ERROR.STATUS_CODE).json(result);
     return;
   }
+
+  const logData = {
+    method: CONSTANT_LOG.METHOD.DELETE,
+    type: CONSTANT_LOG.TYPE.NOTE,
+    userName: userName,
+    noteTitle: noteTitle,
+  };
+  await safePromise(dao.createLog(logData));
 
   result.success = true;
   result.message = MESSAGE.DELETE_NOTE_SUCCESS.TEXT;
@@ -187,7 +215,15 @@ router.patch('/note/move/:noteId', async (req, res) => {
   };
 
   const { noteId } = req.params;
-  let { beforeNoteId, afterNoteId, columnId } = req.body;
+  let {
+    beforeNoteId,
+    afterNoteId,
+    columnId,
+    userName,
+    noteTitle,
+    columnTitle,
+    columnToTitle,
+  } = req.body;
 
   beforeNoteId = isNaN(parseInt(beforeNoteId)) ? null : parseInt(beforeNoteId);
   afterNoteId = isNaN(parseInt(afterNoteId)) ? null : parseInt(afterNoteId);
@@ -208,6 +244,16 @@ router.patch('/note/move/:noteId', async (req, res) => {
     res.status(MESSAGE.MOVE_NOTE_ERROR.STATUS_CODE).json(result);
     return;
   }
+
+  const logData = {
+    method: CONSTANT_LOG.METHOD.MOVE,
+    type: CONSTANT_LOG.TYPE.NOTE,
+    userName: userName,
+    noteTitle: noteTitle,
+    columnTitle: columnTitle,
+    columnToTitle: columnToTitle,
+  };
+  await safePromise(dao.createLog(logData));
 
   result.success = true;
   result.message = MESSAGE.MOVE_NOTE_SUCCESS.TEXT;

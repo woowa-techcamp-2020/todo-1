@@ -182,6 +182,8 @@ export default class Column extends Element {
     const noteId = note.dataset.id;
     const body = {
       content: newText,
+      userName: 'hardcoding admin',
+      contentBefore: previousContent,
     };
 
     fetch(`/api/note/${noteId}`, {
@@ -210,8 +212,16 @@ export default class Column extends Element {
     const note = Store.moduleCaller;
     const noteId = note.dataset.id;
 
+    console.log(note);
+
+    const body = {
+      userName: 'hardcoding admin',
+      noteTitle: note.querySelector('.content').innerText,
+    };
+
     fetch(`/api/note/${noteId}`, {
       method: 'DELETE',
+      body: JSON.stringify(body),
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
