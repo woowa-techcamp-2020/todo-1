@@ -4,6 +4,7 @@ export default class Log extends Element {
   constructor(data) {
     super();
 
+    this.now = new Date();
     this.id = data.id;
     this.user = data.userName;
     this.noteTitle = data.noteTitle;
@@ -73,7 +74,23 @@ export default class Log extends Element {
   getTime() {
     const timeP = document.createElement('p');
     timeP.className = 'time';
-    timeP.innerText = this.time;
+
+    const created = new Date(this.time);
+    const diff = this.now - created;
+
+    if (diff > 24 * 60 * 60 * 1000) {
+      timeP.innerText = `하루 이전`;
+    } else if (diff > 60 * 60 * 1000) {
+      const hour = Math.floor(diff / (60 * 60 * 1000));
+      timeP.innerText = `${hour}시간 이전`;
+    } else if (diff > 60 * 1000) {
+      const min = Math.floor(diff / (60 * 1000));
+      timeP.innerText = `${min}분 이전`;
+    } else {
+      timeP.innerText = `1분 이내`;
+    }
+
+    // timeP.innerText = this.time;
 
     return timeP;
   }
