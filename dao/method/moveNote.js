@@ -36,7 +36,7 @@ function checkLink(firstNote, secondNote) {
 /**
  * 입력받은 인자의 유효성 검사
  * @param {Object} connection  mysql2 connection 객체
- * @param {Function} query       query를 실행하는 함수
+ * @param {Function} query     query를 실행하는 함수
  * @param {Number} beforeId    연결 구조에서 앞에 위치한 노트
  * @param {Number} afterId     연결 구조에서 뒤에 위치한 노트
  * @param {Number} columnId    검사 하고자 하는 column의 id
@@ -58,7 +58,7 @@ async function checkCorrectLink(
   );
 
   if (error || rows.length === 0 || rows.length > 2) {
-    return false;
+    throw new Error();
   }
 
   const firstNote = {
@@ -69,7 +69,7 @@ async function checkCorrectLink(
   };
 
   if (firstNote.column_id !== columnId) {
-    return false;
+    throw new Error();
   }
 
   const secondNote = {
@@ -80,11 +80,49 @@ async function checkCorrectLink(
   };
 
   // 연결 관계가 유효한지 check
-  return (
+  const isValid =
     (checkLink(firstNote, secondNote) || checkLink(secondNote, firstNote)) &&
     firstNote.column_id === columnId &&
-    secondNote.column_id === columnId
+    secondNote.column_id === columnId;
+
+  if (!isValid) {
+    throw new Error();
+  }
+}
+
+/**
+ * 해당 노트와 연결된 노트들의 연결관계를 갱신해줌
+ * @param {Object} connection  mysql2 connection 객체
+ * @param {Function} query     query를 실행하는 함수
+ * @param {Number} noteId      연결을 갱신한 노트의 id
+ */
+async function pickNoteLink(connection, query, noteId) {
+  // READ NOTE LINK
+  // ?: noteId
+  let [rows, error] = await safePromise(
+    query(connection, READ_NOTE_LINK, [noteId]),
   );
+  if (error || rows.length !== 1) {
+    throw new Error();
+  }
+
+  const { prev_note_id, next_note_id } = rows[0];
+
+  if (prev_note_id !== null) {
+    // UPDATE_NEXT_NOTE
+    // ?: next_note_id, NOTE.id
+    error = await safePromise(
+      query(connection, UPDATE_NEXT_NOTE, [next_note_id, prev_note_id]),
+    )[1];
+  }
+
+  if (next_note_id !== null) {
+    // UPDATE_NEXT_NOTE
+    // ?: prev_note_id, NOTE.id
+    error = await safePromise(
+      query(connection, UPDATE_PREV_NOTE, [prev_note_id, next_note_id]),
+    )[0];
+  }
 }
 
 module.exports = async function moveNote(
@@ -103,44 +141,11 @@ module.exports = async function moveNote(
     await connection.beginTransaction();
     let rows, error;
 
-    /**
-     * 이전 노트와의 연결 관계를 끊어줌
-     */
-    // READ NOTE LINK
-    // ?: noteId
-    [rows, error] = await safePromise(
-      this.executeQuery(connection, READ_NOTE_LINK, [noteId]),
-    );
+    // 이전 노트와 연결된 노트들의 연결 관계를 끊어줌
+    await pickNoteLink(connection, this.executeQuery, noteId);
 
-    if (error || rows.length !== 1) {
-      throw new Error();
-    }
-
-    const { prev_note_id, next_note_id } = rows[0];
-
-    if (prev_note_id !== null) {
-      // UPDATE_NEXT_NOTE
-      // ?: next_note_id, NOTE.id
-      error = await safePromise(
-        this.executeQuery(connection, UPDATE_NEXT_NOTE, [
-          next_note_id,
-          prev_note_id,
-        ]),
-      )[1];
-    }
-
-    if (next_note_id !== null) {
-      // UPDATE_NEXT_NOTE
-      // ?: prev_note_id, NOTE.id
-      error = await safePromise(
-        this.executeQuery(connection, UPDATE_PREV_NOTE, [
-          prev_note_id,
-          next_note_id,
-        ]),
-      )[0];
-    }
-
-    const isCorrectLink = await checkCorrectLink(
+    // 이동할 위치의 연결 관계가 유효한지 확인
+    await checkCorrectLink(
       connection,
       this.executeQuery,
       beforeNoteId,
@@ -148,18 +153,14 @@ module.exports = async function moveNote(
       columnId,
     );
 
-    if (!isCorrectLink) {
-      throw new Error();
-    }
-
     /**
      * 새 위치에 연관되어있는 노트들의 연결관계 갱신
      */
     if (!beforeNoteId && !afterNoteId) {
       // 새로운 column에 추가하는 것인지 확인
+      // UPDATE_LINK
+      // ?: prev_note_id, next_note_id, column_id, noteId
       [rows, error] = await safePromise(
-        // UPDATE_LINK
-        // ?: prev_note_id, next_note_id, column_id, noteId
         this.executeQuery(connection, READ_NOTE_OF_COLUMN, [columnId]),
       );
 
@@ -168,9 +169,9 @@ module.exports = async function moveNote(
       }
 
       // 새로운 column에 노트를 추가
+      // UPDATE NOTE COLUMN
+      // ?: column_id, noteId
       [rows, error] = await safePromise(
-        // UPDATE NOTE COLUMN
-        // ?: column_id, noteId
         this.executeQuery(connection, UPDATE_NOTE_COLUMN, [columnId, noteId]),
       );
     } else {
