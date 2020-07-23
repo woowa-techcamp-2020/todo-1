@@ -15,11 +15,7 @@ export default class Column extends Element {
     this.modalManager = Store.modalManager;
 
     data.notes.forEach((note) => {
-      this.notes.push({
-        id: note.id,
-        data: note,
-        dom: new Note(note),
-      });
+      this.notes.push(new Note(note));
     });
 
     this.setElement();
@@ -75,7 +71,7 @@ export default class Column extends Element {
     ul.appendChild(li);
 
     this.notes.forEach((note) => {
-      ul.appendChild(note.dom.render());
+      ul.appendChild(note.render());
     });
 
     this.ul = ul;
@@ -124,9 +120,8 @@ export default class Column extends Element {
     }
 
     const target = this.notes[targetIndex];
-    target.data.content = content;
-    target.dom.setDom(this.ul.querySelector(`li[data-id='${noteKey}']`));
-    target.dom.setContent(content);
+    target.setDom(this.ul.querySelector(`li[data-id='${noteKey}']`));
+    target.setContent(content);
   }
 
   pickNote(noteKey) {
@@ -157,16 +152,9 @@ export default class Column extends Element {
   }
 
   appendNote(data) {
-    const noteObject = {
-      id: data.id,
-      data: data,
-      dom: new Note(data),
-    };
+    const noteObject = new Note(data);
     this.pushNote(noteObject, 0);
-    this.ul.insertBefore(
-      noteObject.dom.render(),
-      this.ul.firstChild.nextSibling,
-    );
+    this.ul.insertBefore(noteObject.render(), this.ul.firstChild.nextSibling);
   }
 
   setTitle(title) {
