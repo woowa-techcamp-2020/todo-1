@@ -3,6 +3,7 @@ const dao = require('../dao/dao.js');
 const safePromise = require('../utils/safePromise');
 
 const MESSAGE = require('./constants/message');
+const CONSTANT_LOG = require('../dao/constants/log');
 
 const router = express.Router();
 
@@ -86,6 +87,15 @@ router.put('/column/:columnId', async (req, res) => {
     return;
   }
 
+  const logData = {
+    method: CONSTANT_LOG.METHOD.CREATE,
+    type: CONSTANT_LOG.TYPE.NOTE,
+    userName: user,
+    noteTitle: content,
+    columnTitle: 'body에 인자로 column 아이디가 필요함',
+  };
+  await safePromise(dao.createLog(logData));
+
   result.success = true;
   result.message = MESSAGE.PUT_NOTE_SUCCESS.TEXT;
   result.data = note;
@@ -131,6 +141,16 @@ router.put('/note/:noteId', async (req, res) => {
     return;
   }
 
+  const logData = {
+    method: CONSTANT_LOG.METHOD.MODIFY,
+    type: CONSTANT_LOG.TYPE.NOTE,
+    userName: 'body에 인자로 유저정보가 필요함',
+    noteTitle: content,
+    columnTitle: 'body에 인자로 column 아이디가 필요함',
+    changeTitle: content,
+  };
+  await safePromise(dao.createLog(logData));
+
   result.success = true;
   result.message = MESSAGE.UPDATE_NOTE_SUCCESS.TEXT;
   res.status(MESSAGE.UPDATE_NOTE_SUCCESS.STATUS_CODE).json(result);
@@ -160,6 +180,15 @@ router.delete('/note/:noteId', async (req, res) => {
     res.status(MESSAGE.DELETE_NOTE_ERROR.STATUS_CODE).json(result);
     return;
   }
+
+  const logData = {
+    method: CONSTANT_LOG.METHOD.DELETE,
+    type: CONSTANT_LOG.TYPE.NOTE,
+    userName: 'body에 인자로 유저정보가 필요함',
+    noteTitle: 'body에 인자로 note 정보가 필요함',
+    columnTitle: 'body에 인자로 column 아이디가 필요함',
+  };
+  await safePromise(dao.createLog(logData));
 
   result.success = true;
   result.message = MESSAGE.DELETE_NOTE_SUCCESS.TEXT;
@@ -207,6 +236,15 @@ router.patch('/note/move/:noteId', async (req, res) => {
     res.status(MESSAGE.MOVE_NOTE_ERROR.STATUS_CODE).json(result);
     return;
   }
+
+  const logData = {
+    method: CONSTANT_LOG.METHOD.MOVE,
+    type: CONSTANT_LOG.TYPE.NOTE,
+    userName: 'body에 인자로 유저정보가 필요함',
+    noteTitle: 'body에 인자로 note 정보가 필요함',
+    columnTitle: 'body에 인자로 column 아이디가 필요함',
+  };
+  await safePromise(dao.createLog(logData));
 
   result.success = true;
   result.message = MESSAGE.MOVE_NOTE_SUCCESS.TEXT;
