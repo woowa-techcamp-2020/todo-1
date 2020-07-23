@@ -10,6 +10,7 @@ class Log {
    * @param {String} column_title 해당 컬럼의
    * @param {String} column_to_title 이동한 컬럼 id
    * @param {String} change_title 변경전 내용
+   * @param {Date} created_at 생성 시간
    */
   constructor(row) {
     const {
@@ -21,6 +22,7 @@ class Log {
       column_title,
       column_to_title,
       change_title,
+      created_at,
     } = row;
 
     this.id = id;
@@ -31,6 +33,7 @@ class Log {
     this.columnTitle = column_title;
     this.columnToTitle = column_to_title;
     this.changeTitle = change_title;
+    this.time = created_at;
   }
 }
 
