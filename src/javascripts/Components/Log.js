@@ -1,5 +1,9 @@
 import Element from './Element.js';
 
+function replaceAll(string, org, dest) {
+  return string.split(org).join(dest);
+}
+
 function cutLongString(string) {
   let ret = string;
   if (ret.length > 13) {
@@ -7,6 +11,12 @@ function cutLongString(string) {
     ret += '...';
   }
   return ret;
+}
+
+function replaceBracket(string) {
+  string = replaceAll(string, '<', '&lt;');
+  string = replaceAll(string, '>', '&gt;');
+  return string;
 }
 
 export default class Log extends Element {
@@ -38,40 +48,42 @@ export default class Log extends Element {
 
     switch (this.method) {
       case 'CREATE': {
-        log.innerHTML = `<p class="user">${
-          this.user
-        }</p><p>${this.method.toLowerCase()}</p><p class="title">${cutLongString(
-          this.noteTitle,
-        )}</p><p>at</p><p>${this.columnFrom}</p>`;
+        log.innerHTML = `<p class="user">${replaceBracket(
+          this.user,
+        )}</p><p>${this.method.toLowerCase()}</p><p class="title">${replaceBracket(
+          cutLongString(this.noteTitle),
+        )}</p><p>at</p><p>${replaceBracket(this.columnFrom)}</p>`;
 
         break;
       }
       case 'MOVE': {
-        log.innerHTML = `<p class="user">${
-          this.user
-        }</p><p>${this.method.toLowerCase()}</p><p class="title">${cutLongString(
-          this.noteTitle,
-        )}</p><p>from</p><p>${this.columnFrom}</p><p>to</p><p>${
-          this.columnTo
-        }</p>`;
+        log.innerHTML = `<p class="user">${replaceBracket(
+          this.user,
+        )}</p><p>${this.method.toLowerCase()}</p><p class="title">${replaceBracket(
+          cutLongString(this.noteTitle),
+        )}</p><p>from</p><p>${replaceBracket(
+          this.columnFrom,
+        )}</p><p>to</p><p>${replaceBracket(this.columnTo)}</p>`;
 
         break;
       }
       case 'MODIFY': {
-        log.innerHTML = `<p class="user">${
-          this.user
-        }</p><p>${this.method.toLowerCase()}</p><p class="title">${cutLongString(
-          this.noteTitle,
-        )}</p><p>to</p><p class="title">${cutLongString(this.changeTitle)}</p>`;
+        log.innerHTML = `<p class="user">${replaceBracket(
+          this.user,
+        )}</p><p>${this.method.toLowerCase()}</p><p class="title">${replaceBracket(
+          cutLongString(this.noteTitle),
+        )}</p><p>to</p><p class="title">${replaceBracket(
+          cutLongString(this.changeTitle),
+        )}</p>`;
 
         break;
       }
       case 'DELETE': {
-        log.innerHTML = `<p class="user">${
-          this.user
-        }</p><p>${this.method.toLowerCase()}</p><p class="title">${cutLongString(
-          this.noteTitle,
-        )}</p><p>at</p><p>${this.columnFrom}</p>`;
+        log.innerHTML = `<p class="user">${replaceBracket(
+          this.user,
+        )}</p><p>${this.method.toLowerCase()}</p><p class="title">${replaceBracket(
+          cutLongString(this.noteTitle),
+        )}</p><p>at</p><p>${replaceBracket(this.columnFrom)}</p>`;
 
         break;
       }
