@@ -357,6 +357,7 @@ export default class Column extends Element {
         user: Store.user.name,
         userId: Store.user.id,
         content: this.textArea.value,
+        columnTitle: this.title,
       };
       fetch(`/api/column/${this.id}`, {
         method: 'PUT',

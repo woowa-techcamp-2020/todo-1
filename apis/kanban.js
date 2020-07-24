@@ -55,6 +55,7 @@ router.get('/get/:kanbanId', async (req, res) => {
  * @apiParam {String} user 유저의 닉네임 [body]
  * @apiParam {Number} userId 유저의 id값 [body]
  * @apiParam {String} content 노트의 내용 [body]
+ * @apiParam {String} columnTitle 컬럼의 제목 [body]
  *
  * @apiSuccess {Boolean} success API 호출 성공 여부
  * @apiSuccess {String} message 응답 결과 메시지
@@ -65,7 +66,7 @@ router.put('/column/:columnId', async (req, res) => {
     message: '',
   };
   const { columnId } = req.params;
-  const { user, userId, content } = req.body;
+  const { user, userId, content, columnTitle } = req.body;
 
   if (!user || !userId || !content) {
     result.message = MESSAGE.PUT_NOTE_ERROR.TEXT;
@@ -93,7 +94,7 @@ router.put('/column/:columnId', async (req, res) => {
     type: CONSTANT_LOG.TYPE.NOTE,
     userName: user,
     noteTitle: content,
-    columnTitle: 'body에 인자로 column 아이디가 필요함',
+    columnTitle: columnTitle,
   };
   await safePromise(dao.createLog(logData));
 
