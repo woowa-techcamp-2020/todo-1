@@ -66,6 +66,7 @@ body section {
   border-radius: 10px;
 
   background-color: #cccccc;
+  overflow-y: auto;
 }
 
 .kanban .column .head {
@@ -117,8 +118,6 @@ body section {
   list-style: none;
   padding: 0;
   margin: 0;
-
-  overflow-y: auto;
 }
 
 .kanban .column ul li {
