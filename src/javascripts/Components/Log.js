@@ -1,5 +1,14 @@
 import Element from './Element.js';
 
+function cutLongString(string) {
+  let ret = string;
+  if (ret.length > 13) {
+    ret = ret.substring(0, 10);
+    ret += '...';
+  }
+  return ret;
+}
+
 export default class Log extends Element {
   constructor(data) {
     super();
@@ -31,18 +40,18 @@ export default class Log extends Element {
       case 'CREATE': {
         log.innerHTML = `<p class="user">${
           this.user
-        }</p><p>${this.method.toLowerCase()}</p><p class="title">${
-          this.noteTitle
-        }</p><p>at</p><p>${this.columnFrom}</p>`;
+        }</p><p>${this.method.toLowerCase()}</p><p class="title">${cutLongString(
+          this.noteTitle,
+        )}</p><p>at</p><p>${this.columnFrom}</p>`;
 
         break;
       }
       case 'MOVE': {
         log.innerHTML = `<p class="user">${
           this.user
-        }</p><p>${this.method.toLowerCase()}</p><p class="title">${
-          this.noteTitle
-        }</p><p>from</p><p>${this.columnFrom}</p><p>to</p><p>${
+        }</p><p>${this.method.toLowerCase()}</p><p class="title">${cutLongString(
+          this.noteTitle,
+        )}</p><p>from</p><p>${this.columnFrom}</p><p>to</p><p>${
           this.columnTo
         }</p>`;
 
@@ -51,18 +60,18 @@ export default class Log extends Element {
       case 'MODIFY': {
         log.innerHTML = `<p class="user">${
           this.user
-        }</p><p>${this.method.toLowerCase()}</p><p class="title">${
-          this.noteTitle
-        }</p><p>to</p><p>${this.changeTitle}</p>`;
+        }</p><p>${this.method.toLowerCase()}</p><p class="title">${cutLongString(
+          this.noteTitle,
+        )}</p><p>to</p><p class="title">${cutLongString(this.changeTitle)}</p>`;
 
         break;
       }
       case 'DELETE': {
         log.innerHTML = `<p class="user">${
           this.user
-        }</p><p>${this.method.toLowerCase()}</p><p class="title">${
-          this.noteTitle
-        }</p><p>at</p><p>${this.columnFrom}</p>`;
+        }</p><p>${this.method.toLowerCase()}</p><p class="title">${cutLongString(
+          this.noteTitle,
+        )}</p><p>at</p><p>${this.columnFrom}</p>`;
 
         break;
       }
