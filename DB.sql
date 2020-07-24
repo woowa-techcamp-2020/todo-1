@@ -9,164 +9,88 @@
 
 
 drop table if exists `ACTIVITY_LOG`;
-create table `ACTIVITY_LOG`
-(
-  `id` int
-(11) not null AUTO_INCREMENT,
-  `note_id` int
-(11) default null,
-  `column_from` int
-(11) default null,
-  `column_to` int
-(11) default null,
-  `type` varchar
-(6) not null,
-  `method` varchar
-(6) not null,
+create table `ACTIVITY_LOG` (
+  `id` int(11) not null AUTO_INCREMENT,
   `created_at` timestamp not null default current_timestamp,
-  primary key
-(`id`),
-  key `FK_ACTIVITY_LOG_note_id_NOTE_id`
-(`note_id`),
-  key `column_from`
-(`column_from`),
-  key `column_to`
-(`column_to`),
-  constraint `FK_ACTIVITY_LOG_note_id_NOTE_id` foreign key
-(`note_id`) references `NOTE`
-(`id`),
-  constraint `activity_log_ibfk_1` foreign key
-(`column_from`) references `column`
-(`id`),
-  constraint `activity_log_ibfk_2` foreign key
-(`column_to`) references `column`
-(`id`)
-);
+  `user_name` text,
+  `note_title` text,
+  `column_title` text,
+  `column_to_title` text,
+  `change_title` text,
+  `type` varchar(6) default null,
+  `method` varchar(6) default null,
+  primary key (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=69 default CHARSET=utf8mb4;
 
 drop table if exists `column`;
-create table `column`
-(
-  `id` int
-(11) not null AUTO_INCREMENT,
-  `kanban_id` int
-(11) not null,
-  `user_id` int
-(11) not null,
+create table `column` (
+  `id` int(11) not null AUTO_INCREMENT,
+  `kanban_id` int(11) not null,
+  `user_id` int(11) not null,
   `title` text not null,
-  `order` tinyint
-(1) not null,
-  primary key
-(`id`),
-  key `kanban_id`
-(`kanban_id`),
-  key `user_id`
-(`user_id`),
-  constraint `column_ibfk_1` foreign key
-(`kanban_id`) references `KANBAN`
-(`id`),
-  constraint `column_ibfk_2` foreign key
-(`user_id`) references `user`
-(`id`)
-);
+  `order` tinyint(1) not null,
+  primary key (`id`),
+  key `kanban_id` (`kanban_id`),
+  key `user_id` (`user_id`),
+  constraint `column_ibfk_1` foreign key (`kanban_id`) references `KANBAN` (`id`),
+  constraint `column_ibfk_2` foreign key (`user_id`) references `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 default CHARSET=utf8mb4;
 
 drop table if exists `KANBAN`;
-create table `KANBAN`
-(
-  `id` int
-(11) not null AUTO_INCREMENT,
-  `title` varchar
-(45) not null,
-  primary key
-(`id`)
-);
+create table `KANBAN` (
+  `id` int(11) not null AUTO_INCREMENT,
+  `title` varchar(45) not null,
+  primary key (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 default CHARSET=utf8mb4;
 
 drop table if exists `NOTE`;
-create table `NOTE`
-(
-  `id` int
-(11) not null AUTO_INCREMENT,
-  `column_id` int
-(11) not null,
-  `user_id` int
-(11) not null,
+create table `NOTE` (
+  `id` int(11) not null AUTO_INCREMENT,
+  `column_id` int(11) not null,
+  `user_id` int(11) not null,
   `content` text not null,
-  `prev_note_id` int
-(11) default null,
-  `next_note_id` int
-(11) default null,
+  `prev_note_id` int(11) default null,
+  `next_note_id` int(11) default null,
   `created_at` timestamp not null default current_timestamp,
-  primary key
-(`id`),
-  key `FK_NOTE_user_id_USER_id`
-(`user_id`),
-  key `column_id`
-(`column_id`),
-  constraint `FK_NOTE_user_id_USER_id` foreign key
-(`user_id`) references `user`
-(`id`),
-  constraint `note_ibfk_1` foreign key
-(`column_id`) references `column`
-(`id`)
-);
+  primary key (`id`),
+  key `FK_NOTE_user_id_USER_id` (`user_id`),
+  key `column_id` (`column_id`),
+  constraint `FK_NOTE_user_id_USER_id` foreign key (`user_id`) references `user` (`id`),
+  constraint `note_ibfk_1` foreign key (`column_id`) references `column` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=26 default CHARSET=utf8mb4;
 
 drop table if exists `user`;
-create table `user`
-(
-  `id` int
-(11) not null AUTO_INCREMENT,
+create table `user` (
+  `id` int(11) not null AUTO_INCREMENT,
   `name` text not null,
   `profile_image` text not null,
-  primary key
-(`id`)
-);
+  primary key (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 default CHARSET=utf8mb4;
 
 drop table if exists `USER_PERMISSION`;
-create table `USER_PERMISSION`
-(
-  `khanban_id` int
-(11) not null,
-  `user_id` int
-(11) not null,
-  `read` tinyint
-(1) not null,
-  `
-create` tinyint
-(1) not null,
-  `modify` tinyint
-(1) not null,
-  `
-delete` tinyint(1)
-not null,
-  primary key
-(`khanban_id`,`user_id`),
-  key `FK_USER_PERMISSION_user_id_USER_id`
-(`user_id`),
-  constraint `FK_USER_PERMISSION_user_id_USER_id` foreign key
-(`user_id`) references `user`
-(`id`),
-  constraint `user_permission_ibfk_1` foreign key
-(`khanban_id`) references `KANBAN`
-(`id`)
-);
+create table `USER_PERMISSION` (
+  `khanban_id` int(11) not null,
+  `user_id` int(11) not null,
+  `read` tinyint(1) not null,
+  `create` tinyint(1) not null,
+  `modify` tinyint(1) not null,
+  `delete` tinyint(1) not null,
+  primary key (`khanban_id`,`user_id`),
+  key `FK_USER_PERMISSION_user_id_USER_id` (`user_id`),
+  constraint `FK_USER_PERMISSION_user_id_USER_id` foreign key (`user_id`) references `user` (`id`),
+  constraint `user_permission_ibfk_1` foreign key (`khanban_id`) references `KANBAN` (`id`)
+) ENGINE=InnoDB default CHARSET=utf8mb4;
 
 drop table if exists `USER_TOKEN`;
-create table `USER_TOKEN`
-(
-  `id` int
-(11) not null AUTO_INCREMENT,
-  `user_id` int
-(11) not null,
+create table `USER_TOKEN` (
+  `id` int(11) not null AUTO_INCREMENT,
+  `user_id` int(11) not null,
   `token` text not null,
-  `expired_at` timestamp not null default current_timestamp on
-update current_timestamp,
-  primary key
-(`id`),
-  key `FK_USER_TOKEN_user_id_USER_id`
-(`user_id`),
-  constraint `FK_USER_TOKEN_user_id_USER_id` foreign key
-(`user_id`) references `user`
-(`id`)
-);
+  `expired_at` timestamp not null default current_timestamp on update current_timestamp,
+  primary key (`id`),
+  key `FK_USER_TOKEN_user_id_USER_id` (`user_id`),
+  constraint `FK_USER_TOKEN_user_id_USER_id` foreign key (`user_id`) references `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=65 default CHARSET=utf8mb4;
 
 
 
