@@ -110,7 +110,9 @@ router.put('/column/:columnId', async (req, res) => {
  * @apiGroup kanban
  *
  * @apiParam {Number} noteId 노트의 id [params]
- * @apiParam {String} 수정할 노트의 내용 [body]
+ * @apiParam {String} content 수정할 노트의 내용 [body]
+ * @apiParam {String} contentBefore 수정 전 노트의 내용 [body]
+ * @apiParam {String} userName 유저의 이름 [body]
  *
  * @apiSuccess {Boolean} success API 호출 성공 여부
  * @apiSuccess {String} message 응답 결과 메시지
@@ -163,6 +165,9 @@ router.put('/note/:noteId', async (req, res) => {
  * @apiGroup kanban
  *
  * @apiParam {Number} noteId 노트의 id [params]
+ * @apiParam {String} userName 사용자 이름 [body]
+ * @apiParam {String} noteTitle 이동한 노트의 title [body]
+ * @apiParam {String} columnTitle 노트의 처음 column의 title [body]
  *
  * @apiSuccess {Boolean} success API 호출 성공 여부
  * @apiSuccess {String} message 응답 결과 메시지
@@ -206,6 +211,10 @@ router.delete('/note/:noteId', async (req, res) => {
  * @apiParam {Number} beforeNoteId 노트의 id [body]
  * @apiParam {Number} afterNoteId 노트의 id [body]
  * @apiParam {Number} columnId 이동하고자 하는 column [body]
+ * @apiParam {String} userName 사용자 이름 [body]
+ * @apiParam {String} noteTitle 이동한 노트의 title [body]
+ * @apiParam {String} columnTitle 노트의 처음 column의 title [body]
+ * @apiParam {String} columnToTitle 이동한 노트의 title [body]
  *
  * @apiSuccess {Boolean} success API 호출 성공 여부
  * @apiSuccess {String} message 응답 결과 메시지
