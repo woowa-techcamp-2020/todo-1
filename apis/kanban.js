@@ -55,6 +55,7 @@ router.get('/get/:kanbanId', async (req, res) => {
  * @apiParam {String} user 유저의 닉네임 [body]
  * @apiParam {Number} userId 유저의 id값 [body]
  * @apiParam {String} content 노트의 내용 [body]
+ * @apiParam {String} columnTitle 컬럼의 제목 [body]
  *
  * @apiSuccess {Boolean} success API 호출 성공 여부
  * @apiSuccess {String} message 응답 결과 메시지
@@ -65,7 +66,7 @@ router.put('/column/:columnId', async (req, res) => {
     message: '',
   };
   const { columnId } = req.params;
-  const { user, userId, content } = req.body;
+  const { user, userId, content, columnTitle } = req.body;
 
   if (!user || !userId || !content) {
     result.message = MESSAGE.PUT_NOTE_ERROR.TEXT;
@@ -93,7 +94,7 @@ router.put('/column/:columnId', async (req, res) => {
     type: CONSTANT_LOG.TYPE.NOTE,
     userName: user,
     noteTitle: content,
-    columnTitle: 'body에 인자로 column 아이디가 필요함',
+    columnTitle: columnTitle,
   };
   await safePromise(dao.createLog(logData));
 
@@ -109,7 +110,9 @@ router.put('/column/:columnId', async (req, res) => {
  * @apiGroup kanban
  *
  * @apiParam {Number} noteId 노트의 id [params]
- * @apiParam {String} 수정할 노트의 내용 [body]
+ * @apiParam {String} content 수정할 노트의 내용 [body]
+ * @apiParam {String} contentBefore 수정 전 노트의 내용 [body]
+ * @apiParam {String} userName 유저의 이름 [body]
  *
  * @apiSuccess {Boolean} success API 호출 성공 여부
  * @apiSuccess {String} message 응답 결과 메시지
@@ -162,6 +165,9 @@ router.put('/note/:noteId', async (req, res) => {
  * @apiGroup kanban
  *
  * @apiParam {Number} noteId 노트의 id [params]
+ * @apiParam {String} userName 사용자 이름 [body]
+ * @apiParam {String} noteTitle 이동한 노트의 title [body]
+ * @apiParam {String} columnTitle 노트의 처음 column의 title [body]
  *
  * @apiSuccess {Boolean} success API 호출 성공 여부
  * @apiSuccess {String} message 응답 결과 메시지
@@ -172,7 +178,7 @@ router.delete('/note/:noteId', async (req, res) => {
     message: '',
   };
   const { noteId } = req.params;
-  const { userName, noteTitle } = req.body;
+  const { userName, noteTitle, columnTitle } = req.body;
 
   const [ret, error] = await safePromise(dao.deleteNote(parseInt(noteId)));
 
@@ -187,6 +193,7 @@ router.delete('/note/:noteId', async (req, res) => {
     type: CONSTANT_LOG.TYPE.NOTE,
     userName: userName,
     noteTitle: noteTitle,
+    columnTitle: columnTitle,
   };
   await safePromise(dao.createLog(logData));
 
@@ -204,6 +211,10 @@ router.delete('/note/:noteId', async (req, res) => {
  * @apiParam {Number} beforeNoteId 노트의 id [body]
  * @apiParam {Number} afterNoteId 노트의 id [body]
  * @apiParam {Number} columnId 이동하고자 하는 column [body]
+ * @apiParam {String} userName 사용자 이름 [body]
+ * @apiParam {String} noteTitle 이동한 노트의 title [body]
+ * @apiParam {String} columnTitle 노트의 처음 column의 title [body]
+ * @apiParam {String} columnToTitle 이동한 노트의 title [body]
  *
  * @apiSuccess {Boolean} success API 호출 성공 여부
  * @apiSuccess {String} message 응답 결과 메시지

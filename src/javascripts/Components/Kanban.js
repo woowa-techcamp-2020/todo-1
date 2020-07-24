@@ -2,6 +2,8 @@ import Element from './Element.js';
 import Column from './Column.js';
 import Hover from './Hover.js';
 
+import Store from '../Store/Store.js';
+
 /**
  * element2가 element1 앞에 존재하는지 확인
  * @param {Element} element1 target element
@@ -161,7 +163,7 @@ export default class Kanban extends Element {
         beforeNoteId,
         afterNoteId,
         columnId,
-        userName: 'hardcoding admin',
+        userName: Store.user.name,
         noteTitle: this.targetData.content,
         columnTitle: this.beforeColumnTitle,
         columnToTitle: columnObject.title,
