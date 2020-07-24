@@ -182,7 +182,7 @@ export default class Column extends Element {
     const noteId = note.dataset.id;
     const body = {
       content: newText,
-      userName: 'hardcoding admin',
+      userName: Store.user.name,
       contentBefore: previousContent,
     };
 
@@ -215,7 +215,7 @@ export default class Column extends Element {
     console.log(note);
 
     const body = {
-      userName: 'hardcoding admin',
+      userName: Store.user.name,
       noteTitle: note.querySelector('.content').innerText,
     };
 
