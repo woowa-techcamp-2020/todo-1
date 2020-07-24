@@ -217,6 +217,7 @@ export default class Column extends Element {
     const body = {
       userName: Store.user.name,
       noteTitle: note.querySelector('.content').innerText,
+      columnTitle: this.title,
     };
 
     fetch(`/api/note/${noteId}`, {

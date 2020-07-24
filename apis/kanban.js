@@ -173,7 +173,7 @@ router.delete('/note/:noteId', async (req, res) => {
     message: '',
   };
   const { noteId } = req.params;
-  const { userName, noteTitle } = req.body;
+  const { userName, noteTitle, columnTitle } = req.body;
 
   const [ret, error] = await safePromise(dao.deleteNote(parseInt(noteId)));
 
@@ -188,6 +188,7 @@ router.delete('/note/:noteId', async (req, res) => {
     type: CONSTANT_LOG.TYPE.NOTE,
     userName: userName,
     noteTitle: noteTitle,
+    columnTitle: columnTitle,
   };
   await safePromise(dao.createLog(logData));
 
