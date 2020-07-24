@@ -58,13 +58,13 @@ DB_TEST_NAME=테스트DB이름
 PORT=서버포트
 ```
 
-## install
+### install
 
 ```sh
 yarn install
 ```
 
-## start
+### start
 
 ```sh
 yarn start
@@ -78,11 +78,21 @@ dist/
 
 위 경로의 파일들을 express router에서 사용합니다.
 
-## test
+### test
 
 ```sh
 yarn test
 ```
+
+### apidoc 만들기
+
+다음 명령을 실행해주세요
+
+```bash
+apidoc -i apis/ -o dist/apidoc/
+```
+
+/apidoc 으로 들어오시면 api 문서를 확인하실 수 있습니다.
 
 ## 특징
 
