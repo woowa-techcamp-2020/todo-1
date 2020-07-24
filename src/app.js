@@ -4,7 +4,7 @@ import Store from './javascripts/Store/Store.js';
 import { getCookie, deleteCookie } from './javascripts/Utils/cookie.js';
 import Router from './javascripts/Components/Router.js';
 import KanbanPage from './javascripts/Components/KanbanPage.js';
-import LoginPage from './javascripts/Components/Loginpage.js';
+import LoginPage from './javascripts/Components/LoginPage.js';
 import ErrorPage from './javascripts/Components/ErrorPage.js';
 
 // eslint-disable-next-line no-unused-vars
