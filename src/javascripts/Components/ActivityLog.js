@@ -133,8 +133,6 @@ export default class ActivityLog extends Element {
   }
   render() {
     this.setEventListeners();
-    this.fetchData();
-
     return this.element;
   }
 }
