@@ -138,6 +138,26 @@ export default class MyComponent extends Element {
 
 모든 컴포넌트는 Element class를 상속해 사용하며 다음과 같은 구조로 되어있습니다.
 
+```BASH
+├── Router  # SPA 라우터 (주소 설정, 이동)
+└── Element # DOM과 관련됨 (Render 실행 시, 이벤트 리스너 설정)
+    ├── ErrorPage        # 에러 페이지
+    ├── LoginPage        # 로그인 페이지
+    │   └── UserList     # 유저 목록
+    │       └── User     # 유저 목록 아이템
+    └── KanbanPage       # 칸반 페이지
+    │   ├── Header       # 헤더 (로고, 메뉴)
+    │   ├── Column       # 컬럼
+    │   │   └── Note     # 노트
+    │   ├── Hover        # 드래그&드랍 때, 포인터에 따라다니는 객체
+    │   ├── ActivityLog  # 액티비티 로그
+    │   └── ModalManager # 모달 매니저
+    └── Modal                 # 모달 (Hide, Show 공통)
+        ├── EditNoteModal     # 노트 수정 모달
+        ├── DeleteNoteModal   # 노트 삭제 모달
+        └── RenameColumnModal # 컬럼 이름 수정 모달
+```
+
 ### 전역 store 사용
 
 ```sh
