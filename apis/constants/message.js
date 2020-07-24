@@ -96,4 +96,16 @@ module.exports = {
     TEXT: '컬럼 이름 수정에 실패했습니다.',
     STATUS_CODE: 500,
   },
+  READ_LOG_SUCCESS: {
+    TEXT: '로그를 읽어오는데 성공했습니다.',
+    STATUS_CODE: 200,
+  },
+  READ_LOG_ERROR: {
+    TEXT: '로그를 읽는데 실패했습니다.',
+    STATUS_CODE: 500,
+  },
+  READ_NO_LOG: {
+    TEXT: '로그가 더이상 없습니다.',
+    STATUS_CODE: 200,
+  },
 };

@@ -49,7 +49,7 @@ router.get('/get/:kanbanId', async (req, res) => {
 /**
  * @api {put} /column/:columnId Column에 노트 정보를 추가함
  * @apiName create new note
- * @apiGroup kanban
+ * @apiGroup Kanban
  *
  * @apiParam {Number} columnId 칸반보드의 id [params]
  * @apiParam {String} user 유저의 닉네임 [body]
@@ -107,7 +107,7 @@ router.put('/column/:columnId', async (req, res) => {
 /**
  * @api {put} /note/:noteId 해당 노트의 정보를 변경함
  * @apiName update note content
- * @apiGroup kanban
+ * @apiGroup Kanban
  *
  * @apiParam {Number} noteId 노트의 id [params]
  * @apiParam {String} content 수정할 노트의 내용 [body]
@@ -162,7 +162,7 @@ router.put('/note/:noteId', async (req, res) => {
 /**
  * @api {delete} /note/:noteId 해당 노트를 삭제함
  * @apiName delete note
- * @apiGroup kanban
+ * @apiGroup Kanban
  *
  * @apiParam {Number} noteId 노트의 id [params]
  * @apiParam {String} userName 사용자 이름 [body]
@@ -205,7 +205,7 @@ router.delete('/note/:noteId', async (req, res) => {
 /**
  * @api {patch} /note/move/:noteId 해당 노트 이동시킴
  * @apiName move note
- * @apiGroup kanban
+ * @apiGroup Kanban
  *
  * @apiParam {Number} noteId 노트의 id [params]
  * @apiParam {Number} beforeNoteId 노트의 id [body]
@@ -274,7 +274,7 @@ router.patch('/note/move/:noteId', async (req, res) => {
 /**
  * @api {patch} /column/rename/:columnId 해당 컬럼 타이틀 변경
  * @apiName rename column
- * @apiGroup kanban
+ * @apiGroup Kanban
  *
  * @apiParam {Number} columnId 컬럼의 id [params]
  * @apiParam {Number} title 변경될 타이틀 내용 [body]
