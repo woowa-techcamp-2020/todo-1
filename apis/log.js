@@ -7,11 +7,11 @@ const MESSAGE = require('./constants/message');
 const router = express.Router();
 
 /**
- * @api {get} /get/:kanbanId Kanban 데이터 요청
+ * @api {get} /log/:page 액티비티 로그를 페이지단위로 호출
  * @apiName get kanban
- * @apiGroup Kanban
+ * @apiGroup Log
  *
- * @apiParam {Number} kanbanId kanban 보드의 id [params]
+ * @apiParam {Number} page 액티비티 로그의 페이지 번호 [params]
  *
  * @apiSuccess {Boolean} success API 호출 성공 여부
  * @apiSuccess {String} message 응답 결과 메시지
@@ -25,24 +25,22 @@ router.get('/log/:page', async (req, res) => {
 
   const [logs, error] = await safePromise(dao.readLogs(parseInt(page)));
 
-  // console.log(logs);
-
   if (error) {
-    result.message = '로그를 읽는데 문제가 발생했습니다.';
-    res.status(MESSAGE.GET_KANBAN_MYSQL_ERROR.STATUS_CODE).json(result);
+    result.message = MESSAGE.READ_LOG_ERROR;
+    res.status(MESSAGE.READ_LOG_ERROR.STATUS_CODE).json(result);
     return;
   }
 
   if (logs.length === 0) {
-    result.message = '로그가 없습니다.';
-    res.status(MESSAGE.GET_KANBAN_ERROR.STATUS_CODE).json(result);
+    result.message = MESSAGE.READ_NO_LOG.MESSAGE;
+    res.status(MESSAGE.READ_NO_LOG.STATUS_CODE).json(result);
     return;
   }
 
   result.success = true;
-  result.message = '로그를 읽었습니다.';
+  result.message = MESSAGE.READ_LOG_SUCCESS;
   result.data = logs;
-  res.status(MESSAGE.GET_KANBAN_SUCCESS.STATUS_CODE).json(result);
+  res.status(MESSAGE.READ_LOG_SUCCESS.STATUS_CODE).json(result);
 });
 
 module.exports = router;
